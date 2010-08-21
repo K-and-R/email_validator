@@ -11,6 +11,8 @@ begin
     gem.homepage = "http://github.com/balexand/email_validator"
     gem.authors = ["Brian Alexander"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "activerecord", ">= 0"
+    gem.add_development_dependency "sqlite3-ruby", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

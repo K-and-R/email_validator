@@ -1,6 +1,18 @@
 = email_validator
 
-Description goes here.
+An email validator for Rails 3. Note that this won't work with earlier versions of Rails.
+
+Add to your Gemfile:
+
+@gem 'email_validator'@
+
+Run:
+
+@bundle install@
+
+The add the following to your model:
+
+@validates :my_email_attribute, :email => true@
 
 == Note on Patches/Pull Requests
 
@@ -14,4 +26,4 @@ Description goes here.
 
 == Credit
 
-Based on work by Mikel Lindsaar. See http://lindsaar.net/2010/1/31/validates_rails_3_awesome_is_true.
+Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
