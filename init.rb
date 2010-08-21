@@ -1,0 +1,1 @@
+require 'email_validator'
