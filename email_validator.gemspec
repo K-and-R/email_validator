@@ -5,9 +5,9 @@
 
 Gem::Specification.new do |s|
   s.name = %q{email_validator}
-  s.version = "0.0.0.pre1"
+  s.version = "1.0.0"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Alexander"]
   s.date = %q{2010-08-21}
   s.description = %q{An email validator for Rails 3. See homepage for details: http://github.com/balexand/email_validator}
