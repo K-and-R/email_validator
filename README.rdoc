@@ -1,4 +1,4 @@
-== email_validator
+== Usage
 
 Add to your Gemfile:
 
