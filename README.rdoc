@@ -1,6 +1,6 @@
 = email_validator
 
-An email validator for Rails 3. Note that this won't work with earlier versions of Rails.
+An email validator for Rails 3.
 
 Add to your Gemfile:
 
@@ -13,16 +13,6 @@ Run:
 The add the following to your model:
 
   validates :my_email_attribute, :email => true
-
-== Note on Patches/Pull Requests
-
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
 
 == Credit
 
