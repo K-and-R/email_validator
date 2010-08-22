@@ -1,6 +1,4 @@
-= email_validator
-
-An email validator for Rails 3.
+== email_validator
 
 Add to your Gemfile:
 
