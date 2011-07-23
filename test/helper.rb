@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'test/unit'
-require 'shoulda'
 require 'active_record'
 
 # connect to in memory sqlite DB

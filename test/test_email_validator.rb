@@ -15,7 +15,7 @@ class TestEmailValidator < Test::Unit::TestCase
     TestUser.new :email => email
   end
 
-  should "accept valid email addresses" do
+  def test_should_accept_valid_email_addresses
     email_addresses = %W{
       foo@bar.com f@c.com nigel.worthington@big.co.uk f@s.co s@gmail.com foo@g-mail.com -@foo.com
       areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca
@@ -26,7 +26,7 @@ class TestEmailValidator < Test::Unit::TestCase
     end
   end
 
-  should "reject invalid email addresses" do
+  def test_should_reject_invalid_email_addresses
     email_addresses = %W{
       asdfasdf f@s f@s.c foo@bar@foo.com @bar.com foo@
     }
@@ -37,7 +37,7 @@ class TestEmailValidator < Test::Unit::TestCase
     end
   end
 
-  should "properly set message" do
+  def test_should_properly_set_message
     user = TestUser.new :email => 'invalidemail@'
     assert !user.valid?
     assert user.errors.full_messages.count == 1
