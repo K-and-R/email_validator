@@ -14,8 +14,6 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/balexand/email_validator}
   s.require_paths = %w(lib)
   s.summary = %q{An email validator for Rails 3.}
-
-  s.add_development_dependency(%q<activerecord>, [">= 0"])
-  s.add_development_dependency(%q<sqlite3>, [">= 0"])
+  s.add_development_dependency("activemodel", ">= 0")
 end
 

@@ -1,20 +1,14 @@
 require 'helper'
 
-class TestUser < ActiveRecord::Base
-  attr_accessor :email
+class TestUser < TestModel
   validates :email, :email => true
 end
 
-class TestUserWithMessage < ActiveRecord::Base
-  attr_accessor :email_address
+class TestUserWithMessage < TestModel
   validates :email_address, :email => {:message => 'is not looking very good!'}
 end
 
 class TestEmailValidator < Test::Unit::TestCase
-  def email(email)
-    TestUser.new :email => email
-  end
-
   def test_should_accept_valid_email_addresses
     email_addresses = %W{
       foo@bar.com f@c.com nigel.worthington@big.co.uk f@s.co s@gmail.com foo@g-mail.com -@foo.com
