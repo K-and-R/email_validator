@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{email_validator}
-  s.version = "1.1.0"
+  s.version = "1.1.1"
   s.authors = ["Brian Alexander"]
   s.date = %q{2011-07-23}
   s.description = %q{An email validator for Rails 3. See homepage for details: http://github.com/balexand/email_validator}
@@ -15,5 +15,6 @@ Gem::Specification.new do |s|
   s.require_paths = %w(lib)
   s.summary = %q{An email validator for Rails 3.}
   s.add_development_dependency("activemodel", ">= 0")
+  s.add_development_dependency("rspec", ">= 0")
 end
 

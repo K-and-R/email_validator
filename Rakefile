@@ -1,13 +1,12 @@
 require 'bundler'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require 'rspec/core/rake_task'
 
 Bundler::GemHelper.install_tasks
 
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+RSpec::Core::RakeTask.new do |t|
+  t.rspec_opts = %w(--format documentation --colour)
 end
 
 Rake::RDocTask.new do |rdoc|
@@ -19,4 +18,4 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-task :default => 'test'
+task :default => 'spec'
