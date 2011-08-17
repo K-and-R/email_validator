@@ -4,6 +4,14 @@ class TestUser < TestModel
   validates :email, :email => true
 end
 
+class TestUserAllowsNil < TestModel
+  validates :email, :email => {:allow_nil => true}
+end
+
+class TestUserAllowsNilFalse < TestModel
+  validates :email, :email => {:allow_nil => false}
+end
+
 class TestUserWithMessage < TestModel
   validates :email_address, :email => {:message => 'is not looking very good!'}
 end
@@ -46,8 +54,7 @@ describe EmailValidator do
     end
 
     context "given the invalid emails" do
-      [ nil,
-        "@missing-local.org",
+      [ "@missing-local.org",
         "! \#$%\`|@invalid-characters-in-local.org",
         "(),:;\`|@more-invalid-characters-in-local.org",
         "<>@[]\`|@even-more-invalid-characters-in-local.org",
@@ -95,6 +102,20 @@ describe EmailValidator do
       it "should add the customized message" do
         subject.errors[:email_address].should include "is not looking very good!"
       end
+    end
+  end
+
+  describe "nil email" do
+    it "should not be valid when :allow_nil option is missing" do
+      TestUser.new(:email => nil).should_not be_valid
+    end
+
+    it "should be valid when :allow_nil options is set to true" do
+      TestUserAllowsNil.new(:email => nil).should be_valid
+    end
+
+    it "should not be valid when :allow_nil option is set to false" do
+      TestUserAllowsNilFalse.new(:email => nil).should_not be_valid
     end
   end
 end
