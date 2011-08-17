@@ -9,7 +9,7 @@ class TestUserWithMessage < TestModel
 end
 
 describe EmailValidator do
-  
+
   describe "validation" do
     context "given the valid emails" do
       [ "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@letters-in-local.org",
@@ -76,24 +76,30 @@ describe EmailValidator do
       end
     end
   end
-  
+
   describe "error messages" do
     context "when the message is not defined" do
       subject { TestUser.new :email => 'invalidemail@' }
       before { subject.valid? }
-      
+
       it "should add the default message" do
         subject.errors[:email].should include "is invalid"
       end
     end
-    
+
     context "when the message is defined" do
       subject { TestUserWithMessage.new :email_address => 'invalidemail@' }
       before { subject.valid? }
-      
+
       it "should add the customized message" do
         subject.errors[:email_address].should include "is not looking very good!"
       end
+    end
+  end
+
+  describe "VERSION" do
+    it "should be present" do
+      EmailValidator::VERSION.should be_present
     end
   end
 end

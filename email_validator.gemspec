@@ -1,6 +1,9 @@
+$:.push File.expand_path("../lib", __FILE__)
+require "email_validator/version"
+
 Gem::Specification.new do |s|
   s.name = %q{email_validator}
-  s.version = "1.1.1"
+  s.version = EmailValidator::VERSION
   s.authors = ["Brian Alexander"]
   s.date = %q{2011-07-23}
   s.description = %q{An email validator for Rails 3. See homepage for details: http://github.com/balexand/email_validator}
