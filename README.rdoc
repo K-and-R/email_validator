@@ -15,3 +15,4 @@ Then add the following to your model:
 == Credit
 
 Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3
+Regular Expression based on http://fightingforalostcause.net/misc/2006/compare-email-regex.php tests.
