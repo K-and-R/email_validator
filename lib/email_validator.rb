@@ -8,5 +8,3 @@ class EmailValidator < ActiveModel::EachValidator
     end
   end
 end
-
-require "email_validator/version"

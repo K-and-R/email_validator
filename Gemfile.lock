@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    email_validator (1.1.1)
+    email_validator (1.2.1)
+      activemodel
 
 GEM
   remote: http://rubygems.org/
@@ -27,6 +28,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activemodel
   email_validator!
   rspec

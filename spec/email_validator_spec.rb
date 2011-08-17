@@ -96,10 +96,4 @@ describe EmailValidator do
       end
     end
   end
-
-  describe "VERSION" do
-    it "should be present" do
-      EmailValidator::VERSION.should be_present
-    end
-  end
 end
