@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    email_validator (1.2.1)
+    email_validator (1.2.3)
       activemodel
 
 GEM
