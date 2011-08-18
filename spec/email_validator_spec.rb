@@ -54,7 +54,9 @@ describe EmailValidator do
     end
 
     context "given the invalid emails" do
-      [ "@missing-local.org",
+      [ "",
+        "test@example.com@example.com",
+        "@missing-local.org",
         "! \#$%\`|@invalid-characters-in-local.org",
         "(),:;\`|@more-invalid-characters-in-local.org",
         "<>@[]\`|@even-more-invalid-characters-in-local.org",
