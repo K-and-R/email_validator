@@ -1,4 +1,4 @@
-{<img src="http://travis-ci.org/balexand/email_validator.png" />}[http://travis-ci.org/balexand/email_validator]
+{<img src="https://secure.travis-ci.org/balexand/email_validator.png" />}[http://travis-ci.org/balexand/email_validator]
 
 == Usage
 
