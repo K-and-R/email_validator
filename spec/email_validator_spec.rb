@@ -83,11 +83,7 @@ describe EmailValidator do
         "invalid-ip@127.0.0.1.26",
         "another-invalid-ip@127.0.0.256",
         "IP-and-port@127.0.0.1:25",
-        "partially.\"quoted\"@sld.com",
-        "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.net",
-        "hans,peter@example.com",
-        "hans(peter@example.com",
-        "hans)peter@example.com"
+        "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.net"
       ].each do |email|
 
         it "#{email.inspect} should not be valid" do
@@ -101,8 +97,12 @@ describe EmailValidator do
       end
     end
 
-    context "given the technically valid but esoteric emails" do
+    context "given the emails that should be invalid in strict_mode but valid in normal mode" do
       [
+        "hans,peter@example.com",
+        "hans(peter@example.com",
+        "hans)peter@example.com",
+        "partially.\"quoted\"@sld.com",
         "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
         "mixed-1234-in-{+^}-local@sld.net"
       ].each do |email|
@@ -150,6 +150,16 @@ describe EmailValidator do
 
     it "should not be valid when :allow_nil option is set to false" do
       TestUserAllowsNilFalse.new(:email => nil).should_not be_valid
+    end
+  end
+
+  describe "default_options" do
+    context "when 'email_validator/strict' has been required" do
+      before { require 'email_validator/strict' }
+
+      it "should validate using strict mode" do
+        TestUser.new(:email => "&'*+-./=?^_{}~@other-valid-characters-in-local.net").should_not be_valid
+      end
     end
   end
 end
