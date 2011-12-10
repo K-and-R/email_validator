@@ -71,6 +71,7 @@ describe EmailValidator do
         "test@example.com@example.com",
         "test@",
         "@missing-local.org",
+        "a b@space-in-local.com",
         "! \#$%\`|@invalid-characters-in-local.org",
         "<>@[]\`|@even-more-invalid-characters-in-local.org",
         "missing-sld@.com",
