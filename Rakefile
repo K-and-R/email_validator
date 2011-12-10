@@ -1,6 +1,10 @@
 require 'bundler'
 require 'rake/testtask'
-require 'rdoc/task'
+begin
+  require 'rdoc/task'
+rescue LoadError
+  require 'rake/rdoctask' # deprecated in Ruby 1.9.3 but needed for Ruby 1.8.7 and JRuby
+end
 require 'rspec/core/rake_task'
 
 Bundler::GemHelper.install_tasks
