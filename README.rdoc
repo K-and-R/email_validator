@@ -1,3 +1,5 @@
+{<img src="https://secure.travis-ci.org/balexand/email_validator.png" />}[http://travis-ci.org/balexand/email_validator]
+
 == Usage
 
 Add to your Gemfile:
