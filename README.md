@@ -10,7 +10,7 @@ gem 'email_validator'
 
 Run:
 
-```ruby
+```
 bundle install
 ```
 
