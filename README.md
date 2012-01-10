@@ -1,31 +1,42 @@
-{<img src="https://secure.travis-ci.org/balexand/email_validator.png" />}[http://travis-ci.org/balexand/email_validator]
+[![Build Status](https://secure.travis-ci.org/balexand/email_validator.png)](http://travis-ci.org/balexand/email_validator)
 
-== Usage
+## Usage
 
 Add to your Gemfile:
 
-  gem 'email_validator'
+```ruby
+gem 'email_validator'
+```
 
 Run:
 
-  bundle install
+```ruby
+bundle install
+```
 
 Then add the following to your model:
 
-  validates :my_email_attribute, :email => true
+```ruby
+validates :my_email_attribute, :email => true
+```
 
-== Strict mode
+## Strict mode
 
 In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
 
-  gem 'email_validator', :require => 'email_validator/strict'
+```ruby
+gem 'email_validator', :require => 'email_validator/strict'
+```
 
 Or you can do this in a specific `validates` call:
 
-  validates :my_email_attribute, :email => {:strict_mode => true}
+```ruby
+validates :my_email_attribute, :email => {:strict_mode => true}
+```
 
-== Credit
+## Credit
 
 Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3
+
 Regular Expression based on http://fightingforalostcause.net/misc/2006/compare-email-regex.php tests.
 
