@@ -34,6 +34,10 @@ Or you can do this in a specific `validates` call:
 validates :my_email_attribute, :email => {:strict_mode => true}
 ```
 
+## Thread safety
+
+This gem is thread safe, with one caveat: `EmailValidator.default_options` must be configured before use in a multi-threaded environment. If you configure `default_options` in a Rails initializer file, then you're good to go since initializers are run before worker threads are spawned.
+
 ## Credit
 
 Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3
