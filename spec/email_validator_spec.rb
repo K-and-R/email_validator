@@ -63,7 +63,7 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should match the strict regexp" do
-          (email =~ EmailValidator.regexp(true)).should be_true
+          (email =~ EmailValidator.regexp(:strict_mode => true)).should be_true
         end
 
       end
@@ -109,7 +109,7 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should not match the strict regexp" do
-          (email =~ EmailValidator.regexp(true)).should be_false
+          (email =~ EmailValidator.regexp(:strict_mode => true)).should be_false
         end
 
       end
@@ -138,7 +138,7 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should not match the strict regexp" do
-          (email =~ EmailValidator.regexp(true)).should be_false
+          (email =~ EmailValidator.regexp(:strict_mode => true)).should be_false
         end
 
       end

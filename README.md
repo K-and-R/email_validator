@@ -47,7 +47,7 @@ EmailValidator.regexp
 ### Strict mode
 
 ```ruby
-EmailValidator.regexp(true)
+EmailValidator.regexp(:strict_mode => true)
 ```
 
 ## Thread safety
