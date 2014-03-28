@@ -47,7 +47,13 @@ describe EmailValidator do
         "aaa@bbb.co.jp",
         "nigel.worthington@big.co.uk",
         "f@c.com",
-        "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca"
+        "f@s",
+        "f@s.c",
+        "user@localhost",
+        "mixed-1234-in-{+^}-local@sld.net",
+        "`&'*+-./=?^_{}~@other-valid-characters-in-local.net",
+        "partially.\"quoted\"@sld.com",
+        "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca",
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
@@ -65,18 +71,15 @@ describe EmailValidator do
     context "given the invalid emails" do
       [
         "",
-        "f@s",
-        "f@s.c",
         "@bar.com",
         "test@example.com@example.com",
         "test@",
         "@missing-local.org",
         "a b@space-in-local.com",
-        "! \#$%\`|@invalid-characters-in-local.org",
-        "<>@[]\`|@even-more-invalid-characters-in-local.org",
+        "! \#$%\|@invalid-characters-in-local.org",
+        "<>@[]\|@even-more-invalid-characters-in-local.org",
         "missing-sld@.com",
         "invalid-characters-in-sld@! \"\#$%(),/;<>_[]\`|.org",
-        "missing-dot-before-tld@com",
         "missing-tld@sld.",
         " ",
         "missing-at-sign.net",
@@ -84,8 +87,11 @@ describe EmailValidator do
         "invalid-ip@127.0.0.1.26",
         "another-invalid-ip@127.0.0.256",
         "IP-and-port@127.0.0.1:25",
+        "host-beginning-with-dot@.example.com",
+        "domain-beginning-with-dash@-example.com",
+        "domain-ending-with-dash@example-.com",
         "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.net",
-        "user@example.com\n<script>alert('hello')</script>"
+        "user@example.com\n<script>alert('hello')</script>",
       ].each do |email|
 
         it "#{email.inspect} should not be valid" do
@@ -104,10 +110,9 @@ describe EmailValidator do
         "hans,peter@example.com",
         "hans(peter@example.com",
         "hans)peter@example.com",
-        "partially.\"quoted\"@sld.com",
-        "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
-        "mixed-1234-in-{+^}-local@sld.net"
-      ].each do |email|
+        ".user-beginning-with-dot@example.com",
+        "user-ending-with-dot.@example.com",
+        ].each do |email|
 
         it "#{email.inspect} should be valid" do
           TestUser.new(:email => email).should be_valid
@@ -160,7 +165,7 @@ describe EmailValidator do
       before { require 'email_validator/strict' }
 
       it "should validate using strict mode" do
-        TestUser.new(:email => "&'*+-./=?^_{}~@other-valid-characters-in-local.net").should_not be_valid
+        TestUser.new(:email => "()<>@,;:\".[]@other-valid-characters-in-local.net").should_not be_valid
       end
     end
   end
