@@ -8,9 +8,12 @@ class EmailValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     options = @@default_options.merge(self.options)
-    name_validation = options[:strict_mode] ? "-a-z0-9+._" : "^@\\s"
-    unless value =~ /\A\s*([#{name_validation}]{1,64})@((?:[-a-z0-9]+\.)+[a-z]{2,})\s*\z/i
+    validator = options[:strict_mode] ? STRICT_REGEX : REGEX
+    unless value =~ validator
       record.errors.add(attribute, options[:message] || :invalid)
     end
   end
+  
+  STRICT_REGEX = /\A\s*([-a-z0-9+._]{1,64})@((?:[-a-z0-9]+\.)+[a-z]{2,})\s*\z/i
+  REGEX = /\A\s*([^@\\s]{1,64})@((?:[-a-z0-9]+\.)+[a-z]{2,})\s*\z/i
 end
