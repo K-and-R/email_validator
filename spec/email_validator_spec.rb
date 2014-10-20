@@ -59,11 +59,15 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should match the regexp" do
-          (email =~ EmailValidator.regexp).should be_true
+          (!!(email =~ EmailValidator.regexp)).should be_truthy
         end
 
         it "#{email.inspect} should match the strict regexp" do
-          (email =~ EmailValidator.regexp(:strict_mode => true)).should be_true
+          (!!(email =~ EmailValidator.regexp(:strict_mode => true))).should be_truthy
+        end
+
+        it "#{email.inspect} should pass the class tester" do
+          expect(EmailValidator.valid?(email)).to be_truthy
         end
 
       end
@@ -105,11 +109,15 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should not match the regexp" do
-          (email =~ EmailValidator.regexp).should be_false
+          expect(email =~ EmailValidator.regexp).to be_falsy
         end
 
         it "#{email.inspect} should not match the strict regexp" do
-          (email =~ EmailValidator.regexp(:strict_mode => true)).should be_false
+          expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_falsy
+        end
+
+        it "#{email.inspect} should fail the class tester" do
+          expect(EmailValidator.valid?(email)).to be_falsy
         end
 
       end
@@ -134,11 +142,11 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should match the regexp" do
-          (email =~ EmailValidator.regexp).should be_true
+          expect(email =~ EmailValidator.regexp).to be_truthy
         end
 
         it "#{email.inspect} should not match the strict regexp" do
-          (email =~ EmailValidator.regexp(:strict_mode => true)).should be_false
+          expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_falsy
         end
 
       end

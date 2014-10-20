@@ -41,7 +41,8 @@ If you need to validate an email outside a model, you can get the regexp :
 ### Normal mode
 
 ```ruby
-EmailValidator.regexp
+EmailValidator.regexp # returns the regex
+EmailValidator.valid?('narf@example.com') # boolean
 ```
 
 ### Strict mode
