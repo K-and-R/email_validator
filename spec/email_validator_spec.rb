@@ -8,6 +8,14 @@ class StrictUser < TestModel
   validates :email, :email => {:strict_mode => true}
 end
 
+class DnsUser < TestModel
+  validates :email, :email => {:dns_mode => true}
+end
+
+class StrictDnsUser < TestModel
+  validates :email, :email => {:strict_mode => true, :dns_mode => true}
+end
+
 class TestUserAllowsNil < TestModel
   validates :email, :email => {:allow_nil => true}
 end
@@ -33,19 +41,19 @@ describe EmailValidator do
         "01234567890@numbers-in-local.net",
         "a@single-character-in-local.org",
         "one-character-third-level@a.example.com",
-        "single-character-in-sld@x.org",
+        "single-character-in-sld@w.org",
         "local@dash-in-sld.com",
-        "letters-in-sld@123.com",
-        "one-letter-sld@x.org",
+        "letters-in-sld@1234.com",
+        "one-letter-sld@w.org",
         "uncommon-tld@sld.museum",
         "uncommon-tld@sld.travel",
         "uncommon-tld@sld.mobi",
-        "country-code-tld@sld.uk",
+        "country-code-tld@sldd.uk",
         "country-code-tld@sld.rw",
         "local@sld.newTLD",
         "local@sub.domains.com",
         "aaa@bbb.co.jp",
-        "nigel.worthington@big.co.uk",
+        "nigel.worthington@bigbig.co.uk",
         "f@c.com",
         "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca"
       ].each do |email|
@@ -58,6 +66,9 @@ describe EmailValidator do
           StrictUser.new(:email => email).should be_valid
         end
 
+        it "#{email.inspect} should not be valid in dns_mode" do
+          DnsUser.new(:email => email).should_not be_valid
+        end
       end
 
     end
@@ -96,17 +107,21 @@ describe EmailValidator do
           StrictUser.new(:email => email).should_not be_valid
         end
 
+        it "#{email.inspect} should not be valid in dns mode" do
+          DnsUser.new(:email => email).should_not be_valid
+        end
+
       end
     end
 
-    context "given the emails that should be invalid in strict_mode but valid in normal mode" do
+    context "given the emails that should be invalid in strict_mode and in dns_mode but valid in normal mode" do
       [
         "hans,peter@example.com",
         "hans(peter@example.com",
         "hans)peter@example.com",
-        "partially.\"quoted\"@sld.com",
+        "partially.\"quoted\"@sldd.com",
         "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
-        "mixed-1234-in-{+^}-local@sld.net"
+        "mixed-1234-in-{+^}-local@sldd.net"
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
@@ -115,6 +130,40 @@ describe EmailValidator do
 
         it "#{email.inspect} should not be valid in strict_mode" do
           StrictUser.new(:email => email).should_not be_valid
+        end
+
+        it "#{email.inspect} should not be valid in dns_mode" do
+          DnsUser.new(:email => email).should_not be_valid
+        end
+
+      end
+    end
+
+    context "given the email that should be valid in normal, dns_mode and struct_mode" do
+      [
+        "example@inbox.com",
+        "patvice@fastmail.fm",
+        "hans-peter@gmail.com",
+        "hans_peter@hotmail.com",
+        "hanspeter@yahoo.com",
+        "test@aol.com",
+        "evaluation@mail.com",
+        "trail@lycos.com",
+        "approval@care2.com",
+        "check@gmx.com",
+        "investigtion@gmx.us"
+      ].each do |email|
+
+       it "#{email.inspect} should be valid" do
+          TestUser.new(:email => email).should be_valid
+        end
+
+        it "#{email.inspect} should not be valid in strict_mode" do
+          StrictUser.new(:email => email).should be_valid
+        end
+
+        it "#{email.inspect} should be valid in dns_mode" do
+          DnsUser.new(:email => email).should be_valid
         end
 
       end
@@ -161,6 +210,24 @@ describe EmailValidator do
 
       it "should validate using strict mode" do
         TestUser.new(:email => "&'*+-./=?^_{}~@other-valid-characters-in-local.net").should_not be_valid
+      end
+    end
+  end
+
+  describe "dns_lookup?" do
+    context "when 'email_validator/dns' has been required" do
+      before { require 'email_validator/dns' }
+
+      it "should validate using dns_mode" do
+        Resolv::DNS.stub_chain(:open, :getresources).and_return [Object.new]
+        TestUser.new(:email => 'example@hotmail.com').should be_valid
+      end
+      it "should validate false using dns_mode" do
+        Resolv::DNS.stub_chain(:open, :getresources).and_return []
+        TestUser.new(:email => 'test@example.com').should_not be_valid
+      end
+      it "should validate false when an email doesn't have a domain" do
+        TestUser.new(:email => 'test').should_not be_valid
       end
     end
   end
