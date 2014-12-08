@@ -34,6 +34,23 @@ Or you can do this in a specific `validates` call:
 validates :my_email_attribute, :email => {:strict_mode => true}
 ```
 
+## Validation outside a model
+
+If you need to validate an email outside a model, you can get the regexp :
+
+### Normal mode
+
+```ruby
+EmailValidator.regexp # returns the regex
+EmailValidator.valid?('narf@example.com') # boolean
+```
+
+### Strict mode
+
+```ruby
+EmailValidator.regexp(:strict_mode => true)
+```
+
 ## Thread safety
 
 This gem is thread safe, with one caveat: `EmailValidator.default_options` must be configured before use in a multi-threaded environment. If you configure `default_options` in a Rails initializer file, then you're good to go since initializers are run before worker threads are spawned.
