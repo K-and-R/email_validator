@@ -59,11 +59,11 @@ describe EmailValidator do
         end
 
         it "#{email.inspect} should match the regexp" do
-          (!!(email =~ EmailValidator.regexp)).should be_truthy
+          expect(email =~ EmailValidator.regexp).to be_truthy
         end
 
         it "#{email.inspect} should match the strict regexp" do
-          (!!(email =~ EmailValidator.regexp(:strict_mode => true))).should be_truthy
+          expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_truthy
         end
 
         it "#{email.inspect} should pass the class tester" do
