@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 class TestUser < TestModel
@@ -47,7 +48,8 @@ describe EmailValidator do
         "aaa@bbb.co.jp",
         "nigel.worthington@big.co.uk",
         "f@c.com",
-        "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca"
+        "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca",
+        "ящик@яндекс.рф"
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
