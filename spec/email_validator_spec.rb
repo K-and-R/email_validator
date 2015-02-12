@@ -129,6 +129,10 @@ describe EmailValidator do
         "hans(peter@example.com",
         "hans)peter@example.com",
         "partially.\"quoted\"@sld.com",
+        ".dot@at.start.of.local.part",
+        "dot.at.@end.of.local.part",
+        "double..dots@in.local.part",
+        ".help..dots.everywhere.@in.local.part",
         "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
         "mixed-1234-in-{+^}-local@sld.net"
       ].each do |email|
