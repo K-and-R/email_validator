@@ -21,18 +21,16 @@ class EmailValidator < ActiveModel::EachValidator
         # Ref: http://tools.ietf.org/html/rfc5321
 
         #Domain name matching
-        letter = '[a-z]'
-        digit = '[0-9]'
         hyphen = '-'
-        let_dig = "(?:#{letter}|#{digit})"
-        ldh = "(?:#{let_dig}|#{hyphen})"
-        label_pattern = "#{let_dig}(?:#{ldh}*#{let_dig}+)*"
-        tld_pattern = '[a-z]{1,63}'
+        alnum = "[[:alnum:]]"
+        alnumhy = "(?:#{alnum}|#{hyphen})"
+        label_pattern = "#{alnum}(?:#{alnumhy}*#{alnum}+)*"
+        tld_pattern = '[[:alpha:]]{1,63}'
         domain_pattern = "(?:#{label_pattern}\\.?)*#{tld_pattern}"
 
         if options[:strict_mode]
           # Local-part matching
-          atom_char = '[-a-z0-9+_!"\'#$%^&*{}/=?`\|~]'
+          atom_char = '[-\p{L&}\p{Nd}+_!"\'#$%^&*{}/=?`\|~]'
           local_part_pattern = "(?:#{atom_char}\\.?)*#{atom_char}"
 
           valid = true if !!(value.strip =~ /\A#{local_part_pattern}@#{domain_pattern}\z/i)
