@@ -57,11 +57,11 @@ describe EmailValidator do
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
-          TestUser.new(:email => email).should be_valid
+          expect(TestUser.new(:email => email)).to be_valid
         end
 
         it "#{email.inspect} should be valid in strict_mode" do
-          StrictUser.new(:email => email).should be_valid
+          expect(StrictUser.new(:email => email)).to be_valid
         end
 
       end
@@ -95,11 +95,11 @@ describe EmailValidator do
       ].each do |email|
 
         it "#{email.inspect} should not be valid" do
-          TestUser.new(:email => email).should_not be_valid
+          expect(TestUser.new(:email => email)).not_to be_valid
         end
 
         it "#{email.inspect} should not be valid in strict_mode" do
-          StrictUser.new(:email => email).should_not be_valid
+          expect(StrictUser.new(:email => email)).not_to be_valid
         end
 
       end
@@ -115,11 +115,11 @@ describe EmailValidator do
         ].each do |email|
 
         it "#{email.inspect} should be valid" do
-          TestUser.new(:email => email).should be_valid
+          expect(TestUser.new(:email => email)).to be_valid
         end
 
         it "#{email.inspect} should not be valid in strict_mode" do
-          StrictUser.new(:email => email).should_not be_valid
+          expect(StrictUser.new(:email => email)).not_to be_valid
         end
 
       end
@@ -132,7 +132,7 @@ describe EmailValidator do
       before { subject.valid? }
 
       it "should add the default message" do
-        subject.errors[:email].should include "is invalid"
+        expect(subject.errors[:email]).to include "is invalid"
       end
     end
 
@@ -141,22 +141,22 @@ describe EmailValidator do
       before { subject.valid? }
 
       it "should add the customized message" do
-        subject.errors[:email_address].should include "is not looking very good!"
+        expect(subject.errors[:email_address]).to include "is not looking very good!"
       end
     end
   end
 
   describe "nil email" do
     it "should not be valid when :allow_nil option is missing" do
-      TestUser.new(:email => nil).should_not be_valid
+      expect(TestUser.new(:email => nil)).not_to be_valid
     end
 
     it "should be valid when :allow_nil options is set to true" do
-      TestUserAllowsNil.new(:email => nil).should be_valid
+      expect(TestUserAllowsNil.new(:email => nil)).to be_valid
     end
 
     it "should not be valid when :allow_nil option is set to false" do
-      TestUserAllowsNilFalse.new(:email => nil).should_not be_valid
+      expect(TestUserAllowsNilFalse.new(:email => nil)).not_to be_valid
     end
   end
 
@@ -165,7 +165,7 @@ describe EmailValidator do
       before { require 'email_validator/strict' }
 
       it "should validate using strict mode" do
-        TestUser.new(:email => "()<>@,;:\".[]@other-valid-characters-in-local.net").should_not be_valid
+        expect(TestUser.new(:email => "()<>@,;:\".[]@other-valid-characters-in-local.net")).not_to be_valid
       end
     end
   end
