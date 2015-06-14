@@ -1,6 +1,7 @@
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
 class EmailValidator < ActiveModel::EachValidator
   @@default_options = {}
+  @email = nil
 
   def self.default_options
     @@default_options
@@ -29,20 +30,12 @@ class EmailValidator < ActiveModel::EachValidator
 
   def self.valid?(value, options={})
     options = @@default_options.merge(options)
-    !!(value.strip =~ self.regexp(options))
+    !!((value.present? || value.nil? && options[:allow_nil].present?) && value.strip =~ self.regexp(options))
   end
 
   def validate_each(record, attribute, value)
-    valid = false
     options = @@default_options.merge(self.options)
-    unless value.nil?
-      # length check
-      local_part = value.strip.split('@').first
-      local_part_too_long = local_part.length > 64 if local_part
-      domain = value.strip.split('@').last
-      label_too_long = !domain.split('.').each.map{|l| !!(l.length < 64) }.all? if domain
-      valid = true if !(local_part_too_long || label_too_long) && !!(value.strip =~ self.class.regexp(options))
-    end
-    record.errors.add(attribute, options[:message] || :invalid) unless valid
+    record.errors.add(attribute, options[:message] || :invalid) unless self.class.valid?(value, options)
   end
+
 end
