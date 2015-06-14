@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency("activemodel", ">= 0")
 
   s.add_development_dependency("rake")
+  s.add_development_dependency("pry")
   s.add_development_dependency("rspec", ">= 0")
 
   s.add_development_dependency('rubysl', '~> 2.0') if RUBY_ENGINE == 'rbx'
