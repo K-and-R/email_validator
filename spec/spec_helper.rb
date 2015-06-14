@@ -2,6 +2,12 @@ require 'rubygems'
 require 'rspec'
 require 'active_model'
 
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
+require 'simplecov'
+SimpleCov.start 'rails'
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 

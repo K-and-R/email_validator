@@ -1,6 +1,15 @@
-[![Build Status](https://secure.travis-ci.org/balexand/email_validator.png)](http://travis-ci.org/balexand/email_validator)
+[![Codeship Status for karlwilbur/email_validator](https://codeship.io/projects/4e17e1c0-f4c8-0132-fe8f-324898733d21/status)](https://codeship.io/projects/85627)
 
-## Usage
+[![Code Climate](https://codeclimate.com/github/karlwilbur/email_validator/badges/gpa.svg)](https://codeclimate.com/github/karlwilbur/email_validator)
+
+# EmailValidator
+An email validator for Rails 3+.
+
+Supports RFC-5321-compliant email validation.
+
+Originally forked from: https://github.com/balexand/email_validator
+
+## Installation
 
 Add to your Gemfile:
 
@@ -14,7 +23,8 @@ Run:
 bundle install
 ```
 
-Then add the following to your model:
+## Usage
+Add the following to your model:
 
 ```ruby
 validates :my_email_attribute, email: true
@@ -61,4 +71,3 @@ This gem is thread safe, with one caveat: `EmailValidator.default_options` must 
 Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3
 
 Regular Expression based on http://fightingforalostcause.net/misc/2006/compare-email-regex.php tests.
-
