@@ -17,7 +17,7 @@ bundle install
 Then add the following to your model:
 
 ```ruby
-validates :my_email_attribute, :email => true
+validates :my_email_attribute, email: true
 ```
 
 ## Strict mode
@@ -31,7 +31,25 @@ gem 'email_validator', :require => 'email_validator/strict'
 Or you can do this in a specific `validates` call:
 
 ```ruby
-validates :my_email_attribute, :email => {:strict_mode => true}
+validates :my_email_attribute, email: {strict_mode: true}
+```
+
+## Validation outside a model
+
+If you need to validate an email outside a model, you can get the regexp :
+
+### Normal mode
+
+```ruby
+EmailValidator.regexp # returns the regex
+EmailValidator.valid?('narf@example.com') # boolean
+```
+
+### Strict mode
+
+```ruby
+EmailValidator.regexp(strict_mode: true) # returns the regex
+EmailValidator.valid?('narf@example.com', {strict_mode: true}) # boolean
 ```
 
 ## Thread safety
