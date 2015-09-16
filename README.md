@@ -17,7 +17,7 @@ bundle install
 Then add the following to your model:
 
 ```ruby
-validates :my_email_attribute, :email => true
+validates :my_email_attribute, email: true
 ```
 
 ## Strict mode
@@ -25,13 +25,13 @@ validates :my_email_attribute, :email => true
 In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
 
 ```ruby
-gem 'email_validator', :require => 'email_validator/strict'
+gem 'email_validator', require: 'email_validator/strict'
 ```
 
 Or you can do this in a specific `validates` call:
 
 ```ruby
-validates :my_email_attribute, :email => {:strict_mode => true}
+validates :my_email_attribute, email: {strict_mode: true}
 ```
 
 ## Validation outside a model
@@ -48,7 +48,7 @@ EmailValidator.valid?('narf@example.com') # boolean
 ### Strict mode
 
 ```ruby
-EmailValidator.regexp(:strict_mode => true)
+EmailValidator.regexp(strict_mode: true)
 ```
 
 ## Thread safety
