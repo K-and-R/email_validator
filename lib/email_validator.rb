@@ -7,8 +7,9 @@ class EmailValidator < ActiveModel::EachValidator
     options = default_options.merge(options)
 
     name_validation = options[:strict_mode] ? "-\\p{L}\\d+._" : "^@\\s"
+    half_width_alphanumeric = options[:half_width_alphanumeric_mode] ? "\w" : ""
 
-    /\A\s*([#{name_validation}]{1,64})@((?:[-\p{L}\d]+\.)+\p{L}{2,})\s*\z/i
+    /\A\s*([#{half_width_alphanumeric}#{name_validation}]{1,64})@((?:[-\p{L}\d]+\.)+\p{L}{2,})\s*\z/i
   end
 
   def self.valid?(value, options = {})

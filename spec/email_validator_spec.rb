@@ -9,6 +9,10 @@ class StrictUser < TestModel
   validates :email, :email => {:strict_mode => true}
 end
 
+class HalfWidthAlphanumeric < TestModel
+  validates :email, :email => {:half_width_alphanumeric_mode => true}
+end
+
 class TestUserAllowsNil < TestModel
   validates :email, :email => {:allow_nil => true}
 end
@@ -149,6 +153,31 @@ describe EmailValidator do
 
         it "#{email.inspect} should not match the strict regexp" do
           expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_falsy
+        end
+
+      end
+    end
+
+    context "given the emails that should be invalid in half_width_alphanumeric_mode but valid in normal mode" do
+      [
+        "寿司@japan.com",
+        "ящик@яндекс.рф"
+      ].each do |email|
+
+        it "#{email.inspect} should be valid" do
+          expect(TestUser.new(:email => email)).to be_valid
+        end
+
+        it "#{email.inspect} should not be valid in strict_mode" do
+          expect(HalfWidthAlphanumeric.new(:email => email)).not_to be_valid
+        end
+
+        it "#{email.inspect} should match the regexp" do
+          expect(email =~ EmailValidator.regexp).to be_truthy
+        end
+
+        it "#{email.inspect} should not match the strict regexp" do
+          expect(email =~ EmailValidator.regexp(:half_width_alphanumeric_mode => true)).to be_falsy
         end
 
       end
