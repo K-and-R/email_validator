@@ -20,6 +20,7 @@ class EmailValidator < ActiveModel::EachValidator
   end
 
   def validate_each(record, attribute, value)
+    return if value.blank?
     options = @@default_options.merge(self.options)
 
     unless self.class.valid?(value, self.options)
