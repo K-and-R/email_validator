@@ -138,9 +138,10 @@ describe EmailValidator do
         "hans,peter@example.com",
         "hans(peter@example.com",
         "hans)peter@example.com",
+        "user..-with-double-dots@example.com",
         ".user-beginning-with-dot@example.com",
         "user-ending-with-dot.@example.com",
-        ].each do |email|
+      ].each do |email|
 
         it "#{email} should be valid in model" do
           expect(TestUser.new(:email => email)).to be_valid
