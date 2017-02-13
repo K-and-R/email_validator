@@ -1,15 +1,17 @@
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
 class EmailValidator < ActiveModel::EachValidator
   @@default_options = {}
-  @email = nil
 
   def self.default_options
     @@default_options
   end
 
   def self.regexp(options={})
+    # Refs:
+    #  http://tools.ietf.org/html/rfc5321
+    #  https://tools.ietf.org/html/rfc2822
+
     options = @@default_options.merge(options)
-    # Ref: http://tools.ietf.org/html/rfc5321
 
     #Domain name matching
     hyphen = '-'
@@ -37,5 +39,4 @@ class EmailValidator < ActiveModel::EachValidator
     options = @@default_options.merge(self.options)
     record.errors.add(attribute, options[:message] || :invalid) unless self.class.valid?(value, options)
   end
-
 end

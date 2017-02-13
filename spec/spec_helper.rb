@@ -2,6 +2,8 @@ require 'rubygems'
 require 'rspec'
 require 'active_model'
 
+I18n.enforce_available_locales = false
+
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
@@ -19,7 +21,7 @@ class TestModel
   def initialize(attributes = {})
     @attributes = attributes
   end
-  
+
   def read_attribute_for_validation(key)
     @attributes[key]
   end
