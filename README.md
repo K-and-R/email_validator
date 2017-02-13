@@ -5,7 +5,7 @@
 # EmailValidator
 An email validator for Rails 3+.
 
-Supports RFC-5321-compliant email validation.
+Supports RFC-2822-compliant and RFC-5321-compliant email validation.
 
 Originally forked from: https://github.com/balexand/email_validator
 
@@ -32,7 +32,7 @@ validates :my_email_attribute, email: true
 
 ## Strict mode
 
-In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
+Normal mode basically checks for a properly sized mailbox label and a single "@" symbol with a proper domain. In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
 
 ```ruby
 gem 'email_validator', :require => 'email_validator/strict'
