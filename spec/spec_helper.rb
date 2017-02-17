@@ -4,9 +4,6 @@ require 'active_model'
 
 I18n.enforce_available_locales = false
 
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-
 require 'simplecov'
 SimpleCov.start 'rails'
 
