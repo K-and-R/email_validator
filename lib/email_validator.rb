@@ -35,6 +35,10 @@ class EmailValidator < ActiveModel::EachValidator
     !!((value.present? || value.nil? && options[:allow_nil].present?) && value =~ self.regexp(options))
   end
 
+  def self.invalid?(value, options={})
+    !valid?(value, options)
+  end
+
   def validate_each(record, attribute, value)
     options = @@default_options.merge(self.options)
     record.errors.add(attribute, options[:message] || :invalid) unless self.class.valid?(value, options)

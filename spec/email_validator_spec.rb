@@ -70,6 +70,14 @@ describe EmailValidator do
           expect(EmailValidator.valid?(email, strict_mode: true)).to be true
         end
 
+        it "#{email} should not be invalid using EmailValidator.invalid?" do
+          expect(EmailValidator.invalid?(email)).to be false
+        end
+
+        it "#{email} should not be invalid using EmailValidator.invalid? in strict_mode" do
+          expect(EmailValidator.invalid?(email, strict_mode: true)).to be false
+        end
+
         it "#{email} should match the regexp" do
           expect( !!(email.strip =~ EmailValidator.regexp) ).to be true
         end
@@ -122,6 +130,14 @@ describe EmailValidator do
           expect(EmailValidator.valid?(email, strict_mode: true)).to be false
         end
 
+        it "#{email} should be invalid using EmailValidator.invalid?" do
+          expect(EmailValidator.invalid?(email)).to be true
+        end
+
+        it "#{email} should be invalid using EmailValidator.invalid? in strict_mode" do
+          expect(EmailValidator.invalid?(email, strict_mode: true)).to be true
+        end
+
         it "#{email} should not match the regexp" do
           expect( !!(email.strip =~ EmailValidator.regexp) ).to be false
         end
@@ -165,6 +181,14 @@ describe EmailValidator do
 
         it "#{email.strip} should not be valid using EmailValidator.valid? in strict_mode" do
           expect(EmailValidator.valid?(email, strict_mode: true)).to be false
+        end
+
+        it "#{email.strip} should not be invalid using EmailValidator.invalid?" do
+          expect(EmailValidator.invalid?(email)).to be false
+        end
+
+        it "#{email.strip} should be invalid using EmailValidator.invalid? in strict_mode" do
+          expect(EmailValidator.invalid?(email, strict_mode: true)).to be true
         end
 
         it "#{email.strip} should match the regexp" do
