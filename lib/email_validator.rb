@@ -15,6 +15,10 @@ class EmailValidator < ActiveModel::EachValidator
     !!(value =~ regexp(options))
   end
 
+  def self.invalid?(value, options = {})
+    !valid?(value, options)
+  end
+
   def self.default_options
     @@default_options
   end
