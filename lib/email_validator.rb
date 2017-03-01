@@ -26,13 +26,13 @@ class EmailValidator < ActiveModel::EachValidator
       local_part_pattern = "(?:#{atom_char}\\.?){,63}#{atom_char}"
       regexp = /\A(?>#{local_part_pattern})@#{domain_pattern}\z/i
     else
-      regexp = /\A(?>[^@\s]{1,64})@#{domain_pattern}\z/i
+      regexp = /\A\s*(?>[^@\s]{1,64})@#{domain_pattern}\s*\z/i
     end
   end
 
   def self.valid?(value, options={})
     options = @@default_options.merge(options)
-    !!((value.present? || value.nil? && options[:allow_nil].present?) && value.strip =~ self.regexp(options))
+    !!((value.present? || value.nil? && options[:allow_nil].present?) && value =~ self.regexp(options))
   end
 
   def validate_each(record, attribute, value)

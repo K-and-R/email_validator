@@ -27,7 +27,6 @@ describe EmailValidator do
         "a+b@plus-in-local.com",
         "a_b@underscore-in-local.com",
         "user@example.com",
-        " user@example.com ",
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@letters-in-local.org",
         "01234567890@numbers-in-local.net",
         "a@single-character-in-local.org",
@@ -135,36 +134,45 @@ describe EmailValidator do
 
     context "given the emails that should be invalid in strict_mode but valid in normal mode" do
       [
+        " leading-and-trailing-whitespace@example.com ",
         "hans,peter@example.com",
         "hans(peter@example.com",
         "hans)peter@example.com",
         "user..-with-double-dots@example.com",
         ".user-beginning-with-dot@example.com",
         "user-ending-with-dot.@example.com",
+        " user-with-leading-whitespace-space@example.com",
+        "	user-with-leading-whitespace-tab@example.com",
+        "
+        user-with-leading-whitespace-newline@example.com",
+        "domain-with-trailing-whitespace-space@example.com ",
+        "domain-with-trailing-whitespace-tab@example.com	",
+        "domain-with-trailing-whitespace-newline@example.com
+        ",
       ].each do |email|
 
-        it "#{email} should be valid in model" do
+        it "#{email.strip} should be valid in model" do
           expect(TestUser.new(:email => email)).to be_valid
         end
 
-        it "#{email} should not be valid in strict_mode in model" do
+        it "#{email.strip} should not be valid in strict_mode in model" do
           expect(StrictUser.new(:email => email)).not_to be_valid
         end
 
-        it "#{email} should be valid using EmailValidator.valid?" do
+        it "#{email.strip} should be valid using EmailValidator.valid?" do
           expect(EmailValidator.valid?(email)).to be true
         end
 
-        it "#{email} should not be valid using EmailValidator.valid? in strict_mode" do
+        it "#{email.strip} should not be valid using EmailValidator.valid? in strict_mode" do
           expect(EmailValidator.valid?(email, strict_mode: true)).to be false
         end
 
-        it "#{email} should match the regexp" do
-          expect( !!(email.strip =~ EmailValidator.regexp) ).to be true
+        it "#{email.strip} should match the regexp" do
+          expect( !!(email =~ EmailValidator.regexp) ).to be true
         end
 
-        it "#{email} should not match the strict regexp" do
-          expect( !!(email.strip =~ EmailValidator.regexp(strict_mode: true)) ).to be false
+        it "#{email.strip} should not match the strict regexp" do
+          expect( !!(email =~ EmailValidator.regexp(strict_mode: true)) ).to be false
         end
       end
     end
