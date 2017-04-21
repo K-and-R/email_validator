@@ -99,7 +99,11 @@ describe EmailValidator do
         "another-invalid-ip@127.0.0.256",
         "IP-and-port@127.0.0.1:25",
         "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.net",
-        "user@example.com\n<script>alert('hello')</script>"
+        "user@example.com\n<script>alert('hello')</script>",
+        "foo@bar..ca",
+        "foo@.bar.fr",
+        'foo@-bar.com',
+        'foo@bar-.com'
       ].each do |email|
 
         it "#{email.inspect} should not be valid" do
@@ -132,7 +136,9 @@ describe EmailValidator do
         "hans)peter@example.com",
         "partially.\"quoted\"@sld.com",
         "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
-        "mixed-1234-in-{+^}-local@sld.net"
+        "mixed-1234-in-{+^}-local@sld.net",
+        '.foo@bar.com',
+        'foo.@bar.com'
       ].each do |email|
 
         it "#{email.inspect} should be valid" do

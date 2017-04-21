@@ -4,15 +4,11 @@ class EmailValidator < ActiveModel::EachValidator
   @@default_options = {}
 
   def self.regexp(options = {})
-    options = default_options.merge(options)
-
-    name_validation = options[:strict_mode] ? "-\\p{L}\\d+._" : "^@\\s"
-
-    /\A\s*([#{name_validation}]{1,64})@((?:[-\p{L}\d]+\.)+\p{L}{2,})\s*\z/i
+    format(options).regex
   end
 
   def self.valid?(value, options = {})
-    !!(value =~ regexp(options))
+    format(options).valid?(value)
   end
 
   def self.default_options
@@ -24,6 +20,58 @@ class EmailValidator < ActiveModel::EachValidator
 
     unless self.class.valid?(value, self.options)
       record.errors.add(attribute, options[:message] || :invalid)
+    end
+  end
+
+  def self.format(options = {})
+    strict_mode?(options) ? StrictEmailFormat.new : BasicEmailFormat.new
+  end
+
+  def self.strict_mode?(options = {})
+    default_options.merge(options)[:strict_mode]
+  end
+
+  class BasicEmailFormat
+    def valid?(email)
+      !!(email =~ regex)
+    end
+
+    def regex
+      left_part = "\\A\\s*#{name.prefix}(#{name.body}{1,64})#{name.suffix}"
+      right_part = "#{domain.prefix}(#{domain.body})#{domain.suffix}\\.\\p{L}{2,}\\s*\\z"
+      /#{left_part}@#{right_part}/i
+    end
+
+    protected
+
+    def name
+      EmailRule.new(body:'[^@\\s]')
+    end
+
+    def domain
+      EmailRule.new(body:'(?:[-\\p{L}\\d\\.]+)', 
+                    prefix: '(?![\\-\\.])', 
+                    suffix: '(?<![\\-\\.])')
+    end
+  end
+
+  class StrictEmailFormat < BasicEmailFormat
+    protected
+
+    def name
+      EmailRule.new(
+        prefix: '(?!\\.)',
+        body: '[-\\p{L}\\d+._]',
+        suffix: '(?<!\\.)'
+      )
+    end
+  end
+
+  class EmailRule
+    attr_accessor :prefix, :body, :suffix
+    
+    def initialize(attributes = {})
+      self.prefix, self.body, self.suffix = attributes.values_at(:prefix, :body, :suffix)
     end
   end
 end
