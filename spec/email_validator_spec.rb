@@ -49,7 +49,8 @@ describe EmailValidator do
         "nigel.worthington@big.co.uk",
         "f@c.com",
         "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca",
-        "ящик@яндекс.рф"
+        "ящик@яндекс.рф",
+        "test@test.testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttes"
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
