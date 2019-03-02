@@ -1,4 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+require 'active_model'
+
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
 class EmailValidator < ActiveModel::EachValidator
   @@default_options = {}
