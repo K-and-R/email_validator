@@ -7,5 +7,3 @@ ActiveSupport::Deprecation.warn(
 )
 
 require 'email_validator'
-
-EmailValidator::default_options[:strict_mode] = true
