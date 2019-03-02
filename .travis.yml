@@ -11,3 +11,6 @@ rvm:
   - jruby-19mode
   - jruby-head
   - rbx-3
+matrix:
+  allow_failures:
+    - rvm: rbx-3
