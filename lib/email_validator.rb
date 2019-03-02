@@ -6,6 +6,12 @@ class EmailValidator < ActiveModel::EachValidator
   @@default_options = {}
 
   def self.regexp(options = {})
+    if options[:strict_mode]
+      ActiveSupport::Deprecation.warn(
+        'Strict mode has been deprecated in email_validator 2.0. To fix this warning, '\
+        'remove `strict_mode: true` from your validation call.'
+      )
+    end
     options = default_options.merge(options)
 
     name_validation = options[:strict_mode] ? "-\\p{L}\\d+._" : "^@\\s"
