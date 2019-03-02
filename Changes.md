@@ -1,5 +1,9 @@
 # HEAD
 
+# 2.0.0
+
+* Looser validation [#49]
+
 # 1.6.0
 
 * Unicode characters support [i7an #24]
