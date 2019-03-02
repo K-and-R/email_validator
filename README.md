@@ -20,44 +20,37 @@ Then add the following to your model:
 validates :my_email_attribute, email: true
 ```
 
-## Strict mode
-
-In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
-
-```ruby
-gem 'email_validator', require: 'email_validator/strict'
-```
-
-Or you can do this in a specific `validates` call:
-
-```ruby
-validates :my_email_attribute, email: {strict_mode: true}
-```
-
 ## Validation outside a model
 
-If you need to validate an email outside a model, you can get the regexp :
-
-### Normal mode
+If you'd like to validate an email outside of a model then here are some class methods that you can use:
 
 ```ruby
 EmailValidator.regexp # returns the regex
-EmailValidator.valid?('narf@example.com') # boolean
+EmailValidator.valid?('narf@example.com') # => true
+EmailValidator.invalid?('narf@example.com') # => false
 ```
 
-### Strict mode
+## Validation philosophy
+
+The validation provided by this gem is loose. It just checks that there's an `@` with something before and after it. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643) for an explanation of why.
+
+## Trimming whitespace
+
+Your users may accidentally submit leading or trailing whitespace when submitting a form. You may want to automatically trim this. This is not the job of a validator gem but it's trivial to implement yourself by adding a setter in your model:
 
 ```ruby
-EmailValidator.regexp(strict_mode: true)
+def email=(e)
+  e = e.strip if e
+  super
+end
 ```
+
+You may also want to convert emails to lowercase in the same way.
+
+## Alternative gems
+
+Do you prefer a different email validation gem? If so, open an issue with a brief explanation of how it differs from this gem. I'll add a link to it in this README.
 
 ## Thread safety
 
-This gem is thread safe, with one caveat: `EmailValidator.default_options` must be configured before use in a multi-threaded environment. If you configure `default_options` in a Rails initializer file, then you're good to go since initializers are run before worker threads are spawned.
-
-## Credit
-
-Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3
-
-Regular Expression based on http://fightingforalostcause.net/misc/2006/compare-email-regex.php tests.
-
+This gem is thread safe.

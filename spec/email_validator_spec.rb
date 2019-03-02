@@ -5,10 +5,6 @@ class TestUser < TestModel
   validates :email, :email => true
 end
 
-class StrictUser < TestModel
-  validates :email, :email => {:strict_mode => true}
-end
-
 class TestUserAllowsNil < TestModel
   validates :email, :email => {:allow_nil => true}
 end
@@ -50,7 +46,15 @@ describe EmailValidator do
         "f@c.com",
         "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca",
         "ящик@яндекс.рф",
-        "test@test.testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttes"
+        "test@test.testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttes",
+        "hans,peter@example.com",
+        "hans(peter@example.com",
+        "hans)peter@example.com",
+        "partially.\"quoted\"@sld.com",
+        "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
+        "mixed-1234-in-{+^}-local@sld.net",
+        "user@domain.рф",
+        "寿司@example.com"
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
@@ -61,16 +65,8 @@ describe EmailValidator do
           expect(TestUser.new(:email => email)).not_to be_invalid
         end
 
-        it "#{email.inspect} should be valid in strict_mode" do
-          expect(StrictUser.new(:email => email)).to be_valid
-        end
-
         it "#{email.inspect} should match the regexp" do
           expect(email =~ EmailValidator.regexp).to be_truthy
-        end
-
-        it "#{email.inspect} should match the strict regexp" do
-          expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_truthy
         end
 
         it "#{email.inspect} should pass the class tester" do
@@ -84,27 +80,12 @@ describe EmailValidator do
     context "given the invalid emails" do
       [
         "",
-        "f@s",
-        "f@s.c",
         "@bar.com",
-        "test@example.com@example.com",
+        " @bar.com",
         "test@",
-        "@missing-local.org",
-        "a b@space-in-local.com",
-        "! \#$%\`|@invalid-characters-in-local.org",
-        "<>@[]\`|@even-more-invalid-characters-in-local.org",
-        "missing-sld@.com",
-        "invalid-characters-in-sld@! \"\#$%(),/;<>_[]\`|.org",
-        "missing-dot-before-tld@com",
-        "missing-tld@sld.",
+        "test@ ",
         " ",
         "missing-at-sign.net",
-        "unbracketed-IP@127.0.0.1",
-        "invalid-ip@127.0.0.1.26",
-        "another-invalid-ip@127.0.0.256",
-        "IP-and-port@127.0.0.1:25",
-        "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.net",
-        "user@example.com\n<script>alert('hello')</script>"
       ].each do |email|
 
         it "#{email.inspect} should not be valid" do
@@ -115,49 +96,12 @@ describe EmailValidator do
           expect(TestUser.new(:email => email)).to be_invalid
         end
 
-        it "#{email.inspect} should not be valid in strict_mode" do
-          expect(StrictUser.new(:email => email)).not_to be_valid
-        end
-
         it "#{email.inspect} should not match the regexp" do
           expect(email =~ EmailValidator.regexp).to be_falsy
         end
 
-        it "#{email.inspect} should not match the strict regexp" do
-          expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_falsy
-        end
-
         it "#{email.inspect} should fail the class tester" do
           expect(EmailValidator.valid?(email)).to be_falsy
-        end
-
-      end
-    end
-
-    context "given the emails that should be invalid in strict_mode but valid in normal mode" do
-      [
-        "hans,peter@example.com",
-        "hans(peter@example.com",
-        "hans)peter@example.com",
-        "partially.\"quoted\"@sld.com",
-        "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
-        "mixed-1234-in-{+^}-local@sld.net"
-      ].each do |email|
-
-        it "#{email.inspect} should be valid" do
-          expect(TestUser.new(:email => email)).to be_valid
-        end
-
-        it "#{email.inspect} should not be valid in strict_mode" do
-          expect(StrictUser.new(:email => email)).not_to be_valid
-        end
-
-        it "#{email.inspect} should match the regexp" do
-          expect(email =~ EmailValidator.regexp).to be_truthy
-        end
-
-        it "#{email.inspect} should not match the strict regexp" do
-          expect(email =~ EmailValidator.regexp(:strict_mode => true)).to be_falsy
         end
 
       end
@@ -195,16 +139,6 @@ describe EmailValidator do
 
     it "should not be valid when :allow_nil option is set to false" do
       expect(TestUserAllowsNilFalse.new(:email => nil)).not_to be_valid
-    end
-  end
-
-  describe "default_options" do
-    context "when 'email_validator/strict' has been required" do
-      before { require 'email_validator/strict' }
-
-      it "should validate using strict mode" do
-        expect(TestUser.new(:email => "&'*+-./=?^_{}~@other-valid-characters-in-local.net")).not_to be_valid
-      end
     end
   end
 end
