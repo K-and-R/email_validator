@@ -57,6 +57,10 @@ describe EmailValidator do
           expect(TestUser.new(:email => email)).to be_valid
         end
 
+        it "#{email.inspect} should not be invalid" do
+          expect(TestUser.new(:email => email)).not_to be_invalid
+        end
+
         it "#{email.inspect} should be valid in strict_mode" do
           expect(StrictUser.new(:email => email)).to be_valid
         end
@@ -105,6 +109,10 @@ describe EmailValidator do
 
         it "#{email.inspect} should not be valid" do
           expect(TestUser.new(:email => email)).not_to be_valid
+        end
+
+        it "#{email.inspect} should be invalid" do
+          expect(TestUser.new(:email => email)).to be_invalid
         end
 
         it "#{email.inspect} should not be valid in strict_mode" do
