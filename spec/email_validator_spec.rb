@@ -53,7 +53,8 @@ describe EmailValidator do
         "partially.\"quoted\"@sld.com",
         "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
         "mixed-1234-in-{+^}-local@sld.net",
-        "user@domain.рф"
+        "user@domain.рф",
+        "寿司@example.com"
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
