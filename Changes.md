@@ -1,5 +1,10 @@
 # HEAD
 
+# 2.0.1
+
+* Add email value to error details [f1sherman #50]
+* CI doesn't test Ruby versions that no longer receive updates [f1sherman #51]
+
 # 2.0.0
 
 * Looser validation [#49]
