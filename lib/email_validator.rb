@@ -23,7 +23,7 @@ class EmailValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     if self.class.invalid?(value)
-      record.errors.add(attribute, options[:message] || :invalid)
+      record.errors.add(attribute, options[:message] || :invalid, value: value)
     end
   end
 end

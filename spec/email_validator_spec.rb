@@ -128,6 +128,15 @@ describe EmailValidator do
     end
   end
 
+  describe "error details" do
+    subject { TestUser.new :email => 'invalidemail@' }
+    before { subject.valid? }
+
+    it "should add the default message" do
+      expect(subject.errors.details[:email]).to eq [{ error: :invalid, value: 'invalidemail@' }]
+    end
+  end
+
   describe "nil email" do
     it "should not be valid when :allow_nil option is missing" do
       expect(TestUser.new(:email => nil)).not_to be_valid
