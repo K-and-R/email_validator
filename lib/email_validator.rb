@@ -15,11 +15,11 @@ class EmailValidator < ActiveModel::EachValidator
 
     #Domain name matching
     hyphen = '-'
+    alpha = "[[:alpha:]]"
     alnum = "[[:alnum:]]"
     alnumhy = "(?:#{alnum}|#{hyphen})"
-    label_pattern = "#{alnum}(?:#{alnumhy}{,62}#{alnum}+)?"
-    tld_pattern = '[[:alpha:]]{1,63}'
-    domain_pattern = "(?:#{label_pattern}\\.)*#{tld_pattern}"
+    label_pattern = "#{alpha}(?:#{alnumhy}{,62}#{alnum}+)?"
+    domain_pattern = "(?:#{label_pattern}\\.)*#{label_pattern}"
     if options[:strict_mode]
       # Local-part matching
       atom_char = '[-\p{Cased_Letter}\p{Nd}+_!"\'#$%^&*{}/=?`\|~]'
