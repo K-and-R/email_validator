@@ -8,6 +8,14 @@ class StrictUser < TestModel
   validates :email, :email => {:strict_mode => true}
 end
 
+class DomainUser < TestModel
+  validates :email, email: {domain: 'example.com'}
+end
+
+class StrictDomainUser < TestModel
+  validates :email, email: {domain: 'example.com', strict_mode: true}
+end
+
 class TestUserAllowsNil < TestModel
   validates :email, :email => {:allow_nil => true}
 end
@@ -233,6 +241,30 @@ describe EmailValidator do
 
     it "should not be valid when :allow_nil option is set to false" do
       expect(TestUserAllowsNilFalse.new(:email => nil)).not_to be_valid
+    end
+  end
+
+  describe "limited to a domain" do
+    it "should not be valid with mismatched domain" do
+      expect(DomainUser.new(email: 'user@not-matching.io')).not_to be_valid
+    end
+
+    it "should be valid with matching domain" do
+      expect(DomainUser.new(email: 'user@example.com')).to be_valid
+    end
+
+    it "should not interpret the dot as any character" do
+      expect(DomainUser.new(email: 'user@example-com')).not_to be_valid
+    end
+
+    describe "in strict mode" do
+      it "should not be valid with mismatched domain" do
+        expect(StrictDomainUser.new(email: 'user@not-matching.io')).not_to be_valid
+      end
+
+      it "should be valid with matching domain" do
+        expect(StrictDomainUser.new(email: 'user@example.com')).to be_valid
+      end
     end
   end
 
