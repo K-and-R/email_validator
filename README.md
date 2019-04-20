@@ -1,4 +1,3 @@
-[![Codeship Status for karlwilbur/email_validator](https://codeship.io/projects/4e17e1c0-f4c8-0132-fe8f-324898733d21/status)](https://codeship.io/projects/85627)
 [![Code Climate](https://codeclimate.com/github/karlwilbur/email_validator/badges/gpa.svg)](https://codeclimate.com/github/karlwilbur/email_validator)
 [![Test Coverage](https://codeclimate.com/github/karlwilbur/email_validator/badges/coverage.svg)](https://codeclimate.com/github/karlwilbur/email_validator/coverage)
 
