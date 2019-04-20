@@ -29,6 +29,12 @@ Add the following to your model:
 validates :my_email_attribute, email: true
 ```
 
+You can also limit to a single domain (e.g: this might help if you have separate `User` and `AdminUser` models and want to ensure that `AdminUser` emails are on a specific domain):
+
+```ruby
+validates :my_email_attribute, email: {domain: 'example.com'}
+```
+
 ## Strict mode
 
 Normal mode basically checks for a properly sized mailbox label and a single "@" symbol with a proper domain. In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
