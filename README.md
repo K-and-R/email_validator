@@ -37,7 +37,7 @@ validates :my_email_attribute, email: {domain: 'example.com'}
 
 ## Strict mode
 
-Normal mode basically checks for a properly sized mailbox label and a single "@" symbol with a proper domain. In order to have stricter validation (according to http://www.remote.org/jochen/mail/info/chars.html) enable strict mode. You can do this globally by adding the following to your Gemfile:
+Normal mode basically checks for a properly sized mailbox label and a single "@" symbol with a proper domain. In order to have stricter validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html)) enable strict mode. You can do this globally by adding the following to your Gemfile:
 
 ```ruby
 gem 'email_validator', :require => 'email_validator/strict'
