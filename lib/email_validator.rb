@@ -53,7 +53,7 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     def atom_char
-      '[-\p{Cased_Letter}\p{Nd}+_!"\'#$%^&*{}/=?`\|~]'
+      "[-#{alpha}#{alnum}+_!\"'#$%^&*{}/=?`\|~]"
     end
 
     def local_part_pattern
