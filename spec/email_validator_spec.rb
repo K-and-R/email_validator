@@ -30,19 +30,72 @@ end
 
 describe EmailValidator do
   describe "validation" do
-    context "given the valid emails" do
-      [
+    valid_special_chars = {
+      ampersand: '&',
+      asterisk: '*',
+      backtick: '`',
+      braceleft: '{',
+      braceright: '}',
+      caret: '^',
+      dollar: '$',
+      equals: '=',
+      exclaim: '!',
+      hash: '#',
+      hyphen: '-',
+      percent: '%',
+      plus: '+',
+      pipe: '|',
+      question: '?',
+      quotedouble: '"',
+      quotesingle: "'",
+      slash: '/',
+      tilde: '~',
+      underscore: '_',
+    }
+
+    invalid_special_chars = {
+      backslash: '\\',
+      braketleft: '[',
+      braketright: ']',
+      colon: ':',
+      comma: ',',
+      greater: '>',
+      lesser: '<',
+      parenleft: '(',
+      parenright: ')',
+      semicolon: ';',
+    }
+
+    valid_includable    = valid_special_chars.merge( {dot: '.'} )
+    valid_beginable     = valid_special_chars
+    valid_endable       = valid_special_chars
+    invalid_includable  = { at: '@', space: ' ' }
+    strictly_invalid_includable  = invalid_special_chars
+    strictly_invalid_beginable   = strictly_invalid_includable.merge( {dot: '.'} )
+    strictly_invalid_endable     = strictly_invalid_beginable
+    domain_invalid_beginable  = invalid_special_chars.merge(valid_special_chars)
+    domain_invalid_endable    = domain_invalid_beginable
+    domain_invalid_includable = domain_invalid_beginable.reject {|k,v| k == :hyphen }
+
+    context "given the valid email" do
+      valid_includable.map { |k,v| [
+        "include-#{v}-#{k.to_s}@valid-characters-in-local.dev",
+      ]}.concat(valid_beginable.map { |k,v| [
+        "#{v}start-with-#{k.to_s}@valid-characters-in-local.dev",
+      ]}).concat(valid_endable.map { |k,v| [
+        "end-with-#{k.to_s}-#{v}@valid-characters-in-local.dev",
+      ]}).concat([
         "a+b@plus-in-local.com",
         "a_b@underscore-in-local.com",
         "user@example.com",
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@letters-in-local.org",
-        "01234567890@numbers-in-local.net",
-        "a@single-character-in-local.org",
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@letters-in-local.dev",
+        "01234567890@numbers-in-local.dev",
+        "a@single-character-in-local.dev",
         "one-character-third-level@a.example.com",
-        "single-character-in-sld@x.org",
+        "single-character-in-sld@x.dev",
         "local@dash-in-sld.com",
         "numbers-in-sld@s123.com",
-        "one-letter-sld@x.org",
+        "one-letter-sld@x.dev",
         "uncommon-tld@sld.museum",
         "uncommon-tld@sld.travel",
         "uncommon-tld@sld.mobi",
@@ -56,12 +109,10 @@ describe EmailValidator do
         "f@s",
         "f@s.c",
         "user@localhost",
-        "mixed-1234-in-{+^}-local@sld.net",
-        "`&'*+-./=?^_{}~@other-valid-characters-in-local.net",
+        "mixed-1234-in-{+^}-local@sld.dev",
         "partially.\"quoted\"@sld.com",
         "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca",
-      ].each do |email|
-
+      ]).flatten.each do |email|
         it "#{email} should be valid" do
           expect(TestUser.new(:email => email)).to be_valid
         end
@@ -96,21 +147,25 @@ describe EmailValidator do
       end
     end
 
-    context "given the invalid emails" do
-      [
+    context "given the invalid email" do
+      invalid_includable.map { |k,v| [
+        "include-#{v}-#{k.to_s}@invalid-characters-in-local.dev",
+      ]}.concat(domain_invalid_beginable.map { |k,v| [
+        "start-with-#{k.to_s}@#{v}invalid-characters-in-domain.dev",
+      ]}).concat(domain_invalid_endable.map { |k,v| [
+        "end-with-#{k.to_s}@invalid-characters-in-domain#{v}.dev",
+      ]}).concat(domain_invalid_includable.map { |k,v| [
+        "include-#{k.to_s}@invalid-characters-#{v}-in-domain.dev",
+      ]}).concat([
         "",
         "@bar.com",
         "test@example.com@example.com",
         "test@",
-        "@missing-local.org",
-        "a b@space-in-local.com",
-        "! \#$%\|@invalid-characters-in-local.org",
-        "<>@[]\|@even-more-invalid-characters-in-local.org",
+        "@missing-local.dev",
         "missing-sld@.com",
-        "invalid-characters-in-sld@! \"\#$%(),/;<>_[]\`|.org",
         "missing-tld@sld.",
         " ",
-        "missing-at-sign.net",
+        "missing-at-sign.dev",
         "only-numbers-in-domain-label@sub.123.com",
         "only-numbers-in-domain-label@123.example.com",
         "unbracketed-IP@127.0.0.1",
@@ -120,10 +175,9 @@ describe EmailValidator do
         "host-beginning-with-dot@.example.com",
         "domain-beginning-with-dash@-example.com",
         "domain-ending-with-dash@example-.com",
-        "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.net",
+        "the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev",
         "user@example.com\n<script>alert('hello')</script>",
-      ].each do |email|
-
+      ]).flatten.each do |email|
         it "#{email} should not be valid" do
           expect(TestUser.new(:email => email)).not_to be_valid
         end
@@ -158,12 +212,15 @@ describe EmailValidator do
       end
     end
 
-    context "given the emails that should be invalid in strict_mode but valid in normal mode" do
-      [
+    context "given the strictly invalid email" do
+      strictly_invalid_includable.map { |k,v| [
+        "include-#{v}-#{k.to_s}@invalid-characters-in-local.dev",
+      ]}.concat(strictly_invalid_beginable.map { |k,v| [
+        "#{v}start-with-#{k.to_s}@invalid-characters-in-local.dev",
+      ]}).concat(strictly_invalid_endable.map { |k,v| [
+        "end-with-#{k.to_s}#{v}@invalid-characters-in-local.dev",
+      ]}).concat([
         " leading-and-trailing-whitespace@example.com ",
-        "hans,peter@example.com",
-        "hans(peter@example.com",
-        "hans)peter@example.com",
         "user..-with-double-dots@example.com",
         ".user-beginning-with-dot@example.com",
         "user-ending-with-dot.@example.com",
@@ -175,13 +232,13 @@ describe EmailValidator do
         "domain-with-trailing-whitespace-tab@example.com	",
         "domain-with-trailing-whitespace-newline@example.com
         ",
-      ].each do |email|
+      ]).flatten.each do |email|
 
-        it "#{email.strip} should be valid in model" do
+        it "#{email.strip} a model should be valid" do
           expect(TestUser.new(:email => email)).to be_valid
         end
 
-        it "#{email.strip} should not be valid in strict_mode in model" do
+        it "#{email.strip} a model should not be valid in strict_mode" do
           expect(StrictUser.new(:email => email)).not_to be_valid
         end
 
@@ -274,8 +331,8 @@ describe EmailValidator do
     context "when 'email_validator/strict' has been required" do
       before { require 'email_validator/strict' }
 
-      it "should validate using strict mode" do
-        expect(TestUser.new(:email => "()<>@,;:\".[]@other-valid-characters-in-local.net")).not_to be_valid
+      it "should not validate using strict mode" do
+        expect(TestUser.new(:email => "()<>@,;:\".[]@other-invalid-characters-in-local.dev")).not_to be_valid
       end
     end
   end
