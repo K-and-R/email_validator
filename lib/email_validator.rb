@@ -17,8 +17,8 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     # Refs:
-    #  http://tools.ietf.org/html/rfc5321
-    #  https://tools.ietf.org/html/rfc2822
+    #  https://tools.ietf.org/html/rfc2822 : 3.2. Lexical Tokens, 3.4.1. Addr-spec specification
+    #  https://tools.ietf.org/html/rfc5321 : 4.1.2.  Command Argument Syntax
     def regexp(options={})
       options = @@default_options.merge(options)
 
@@ -53,11 +53,14 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     def atom_char
-      "[-#{alpha}#{alnum}+_!\"'#$%^&*{}/=?`\|~]"
+      # The `atext` spec
+      # We are looking at this without whitespace; no whitespace support here
+      "[-#{alpha}#{alnum}+_!\"'#$%^&*{}/=?`|~]"
     end
 
     def local_part_pattern
-      "(?:#{atom_char}\\.?){,63}#{atom_char}"
+      # the `dot-atom-text` spec, but with a 64 character limit
+      "#{atom_char}(?:\\.?#{atom_char}){,63}"
     end
   end
 
