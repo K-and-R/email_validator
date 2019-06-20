@@ -49,7 +49,7 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     def label_pattern
-      "#{alpha}(?:#{alnumhy}{,62}#{alnum}+)?"
+      "#{alpha}(?:#{alnumhy}{,62}#{alnum})?"
     end
 
     def atom_char
