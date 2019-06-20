@@ -66,16 +66,16 @@ describe EmailValidator do
       semicolon: ';',
     }
 
-    valid_includable    = valid_special_chars.merge( {dot: '.'} )
-    valid_beginable     = valid_special_chars
-    valid_endable       = valid_special_chars
-    invalid_includable  = { at: '@', space: ' ' }
-    strictly_invalid_includable  = invalid_special_chars
-    strictly_invalid_beginable   = strictly_invalid_includable.merge( {dot: '.'} )
-    strictly_invalid_endable     = strictly_invalid_beginable
-    domain_invalid_beginable  = invalid_special_chars.merge(valid_special_chars)
-    domain_invalid_endable    = domain_invalid_beginable
-    domain_invalid_includable = domain_invalid_beginable.reject {|k,v| k == :hyphen }
+    valid_includable            = valid_special_chars.merge( {dot: '.'} )
+    valid_beginable             = valid_special_chars
+    valid_endable               = valid_special_chars
+    invalid_includable          = { at: '@', space: ' ' }
+    strictly_invalid_includable = invalid_special_chars
+    strictly_invalid_beginable  = strictly_invalid_includable.merge( {dot: '.'} )
+    strictly_invalid_endable    = strictly_invalid_beginable
+    domain_invalid_beginable    = invalid_special_chars.merge(valid_special_chars)
+    domain_invalid_endable      = domain_invalid_beginable
+    domain_invalid_includable   = domain_invalid_beginable.reject {|k,v| k == :hyphen }
 
     context "given the valid email" do
       valid_includable.map { |k,v| [
