@@ -13,7 +13,7 @@ Originally forked from: https://github.com/balexand/email_validator
 Add to your Gemfile:
 
 ```ruby
-gem 'email_validator'
+gem 'email_validator', github: 'karlwilbur/email_validator'
 ```
 
 Run:
@@ -40,7 +40,7 @@ validates :my_email_attribute, email: {domain: 'example.com'}
 Normal mode basically checks for a properly sized mailbox label and a single "@" symbol with a proper domain. In order to have stricter validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html)) enable strict mode. You can do this globally by adding the following to your Gemfile:
 
 ```ruby
-gem 'email_validator', :require => 'email_validator/strict'
+gem 'email_validator', github: 'karlwilbur/email_validator', :require => 'email_validator/strict'
 ```
 
 Or you can do this in a specific `validates` call:
@@ -71,8 +71,4 @@ EmailValidator.valid?('narf@example.com', {strict_mode: true}) # boolean
 
 This gem is thread safe, with one caveat: `EmailValidator.default_options` must be configured before use in a multi-threaded environment. If you configure `default_options` in a Rails initializer file, then you're good to go since initializers are run before worker threads are spawned.
 
-## Credit
 
-Based on http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3
-
-Regular Expression based on http://fightingforalostcause.net/misc/2006/compare-email-regex.php tests.
