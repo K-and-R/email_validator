@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/balexand/email_validator.png)](http://travis-ci.org/balexand/email_validator)
+[![Build Status](https://secure.travis-ci.org/balexand/email_validator.svg)](http://travis-ci.org/balexand/email_validator)
 
 ## Usage
 
