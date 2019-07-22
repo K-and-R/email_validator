@@ -17,7 +17,7 @@ class TestUserWithMessage < TestModel
   validates :email_address, :email => {:message => 'is not looking very good!'}
 end
 
-describe EmailValidator do
+RSpec.describe EmailValidator do
 
   describe "validation" do
     context "given the valid emails" do
