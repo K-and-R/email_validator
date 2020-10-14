@@ -25,7 +25,7 @@ class EmailValidator < ActiveModel::EachValidator
       options = @@default_options.merge(options)
 
       domain_pattern = options[:domain].sub(/\./, '\.') if options[:domain]
-      domain_pattern ||= "(?:#{label_pattern}\\.)*#{label_pattern}"
+      domain_pattern ||= "(?:#{address_literal}|(?:#{label_pattern}\\.)*#{label_pattern})"
 
       if options[:strict_mode]
         # validate local part
@@ -48,6 +48,19 @@ class EmailValidator < ActiveModel::EachValidator
 
     def alnumhy
       "(?:#{alnum}|-)"
+    end
+
+    def ipv4
+      '\d{1,3}(?:\.\d{1,3}){3}'
+    end
+
+    def ipv6
+      # only supporting full IPv6 addresses right now
+      'IPv6:[[:xdigit:]]{1,4}(?::[[:xdigit:]]{1,4}){7}'
+    end
+
+    def address_literal
+      "\\[(?:#{ipv4}|#{ipv6})\\]"
     end
 
     def label_pattern

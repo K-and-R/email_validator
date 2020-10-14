@@ -112,6 +112,8 @@ describe EmailValidator do
         'user@localhost',
         'mixed-1234-in-{+^}-local@sld.dev',
         'partially."quoted"@sld.com',
+        'bracketed-IP@[127.0.0.1]',
+        'bracketed-and-labeled-IPv6@[IPv6:abcd:ef01:1234:5678:9abc:def0:1234:5678]',
         'areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca'
       ]).flatten.each do |email|
         it "#{email} should be valid" do
@@ -171,10 +173,13 @@ describe EmailValidator do
         'missing-at-sign.dev',
         'only-numbers-in-domain-label@sub.123.com',
         'only-numbers-in-domain-label@123.example.com',
-        'unbracketed-IP@127.0.0.1',
-        'invalid-ip@127.0.0.1.26',
-        'another-invalid-ip@127.0.0.256',
-        'IP-and-port@127.0.0.1:25',
+        'unbracketed-IPv6@abcd:ef01:1234:5678:9abc:def0:1234:5678',
+        'unbracketed-and-labled-IPv6@IPv6:abcd:ef01:1234:5678:9abc:def0:1234:5678',
+        'bracketed-and-unlabeled-IPv6@[abcd:ef01:1234:5678:9abc:def0:1234:5678]',
+        'unbracketed-IPv4@127.0.0.1',
+        'invalid-IPv4@127.0.0.1.26',
+        'another-invalid-IPv4@127.0.0.256',
+        'IPv4-and-port@127.0.0.1:25',
         'host-beginning-with-dot@.example.com',
         'domain-beginning-with-dash@-example.com',
         'domain-ending-with-dash@example-.com',
