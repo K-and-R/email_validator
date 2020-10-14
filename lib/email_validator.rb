@@ -1,7 +1,12 @@
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
 class EmailValidator < ActiveModel::EachValidator
   # rubocop:disable Style/ClassVars
-  @@default_options = {}
+  @@default_options = {
+    :allow_nil => false,
+    :domain => nil,
+    :require_fqdn => true,
+    :strict_mode => false
+  }
   # rubocop:enable Style/ClassVars
 
   class << self
@@ -24,7 +29,8 @@ class EmailValidator < ActiveModel::EachValidator
     def regexp(options = {})
       options = @@default_options.merge(options)
 
-      domain_pattern = options[:domain].sub(/\./, '\.') if options[:domain]
+      domain_pattern = options[:domain].sub(/\./, '\.') if options[:domain].present?
+      domain_pattern ||= "(?:#{label_pattern}\\.)+#{label_pattern}" if options[:require_fqdn]
       domain_pattern ||= "(?:#{address_literal}|(?:#{label_pattern}\\.)*#{label_pattern})"
 
       if options[:strict_mode]
