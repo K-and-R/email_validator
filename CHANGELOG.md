@@ -5,6 +5,10 @@ This file is used to list changes made in `email_validator`.
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# 1.9.0.pre (2020-10-14)
+- [karlwilbur] - Add `require_fqdn` option, require FQDN by default
+- [karlwilbur] - Add support for IPv4 and IPv6 address hosts
+- [karlwilbur] - Add Rubocop, `.editorconfig`; code cleanup/linting
 
 # 1.8.0 (2019-06-14)
 - [karlwilbur] - Refactor class methods for readability
