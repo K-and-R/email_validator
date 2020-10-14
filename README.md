@@ -67,8 +67,11 @@ EmailValidator.regexp(strict_mode: true) # returns the regex
 EmailValidator.valid?('narf@example.com', {strict_mode: true}) # boolean
 ```
 
+## Alternative gems
+
+Do you prefer a different email validation gem? If so, open an issue with a brief explanation of how it differs from this gem. I'll add a link to it in this README.
+
+* [`email_address`](https://github.com/afair/email_address) (https://github.com/K-and-R/email_validator/issues/58)
 ## Thread safety
 
 This gem is thread safe, with one caveat: `EmailValidator.default_options` must be configured before use in a multi-threaded environment. If you configure `default_options` in a Rails initializer file, then you're good to go since initializers are run before worker threads are spawned.
-
-
