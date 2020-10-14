@@ -2,4 +2,4 @@
 
 require 'email_validator'
 
-EmailValidator::default_options[:strict_mode] = true
+EmailValidator.default_options[:strict_mode] = true
