@@ -1,5 +1,6 @@
 [![Code Climate](https://codeclimate.com/github/karlwilbur/email_validator/badges/gpa.svg)](https://codeclimate.com/github/karlwilbur/email_validator)
 [![Test Coverage](https://codeclimate.com/github/karlwilbur/email_validator/badges/coverage.svg)](https://codeclimate.com/github/karlwilbur/email_validator/coverage)
+[![Build Status](https://secure.travis-ci.org/K-and-R/email_validator.svg)](http://travis-ci.org/K-and-R/email_validator)
 
 # EmailValidator
 An email validator for Rails 3+.
