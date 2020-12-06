@@ -1,12 +1,19 @@
+language: ruby
 rvm:
-  - 2.3.8
-  - 2.4.6
-  - 2.5.5
-  - 2.6.2
+  - 2.4.7
+  - 2.4.10
+  - 2.5.0
+  - 2.5.8
+  - 2.6.0
+  - 2.6.6
+  - 2.7.0
+  - 2.7.2
   - ruby-head
-  - jruby-19mode
   - jruby-head
-  - rbx-3
-matrix:
-  allow_failures:
-    - rvm: rbx-3
+notifications:
+  recipients:
+    - karl@kandrsoftware.com
+branches:
+  only:
+    - master
+    - develop
