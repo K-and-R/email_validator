@@ -1,0 +1,77 @@
+# CHANGELOG
+
+This file is used to list changes made in `email_validator`.
+
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
+
+# 2.1.0 (TDB)
+
+* [karlwilbur] - Add `:mode` config option; default to `:loose`
+
+# 1.9.0.pre (2020-10-14)
+
+* [karlwilbur] - Add `require_fqdn` option, require FQDN by default
+* [karlwilbur] - Add support for IPv4 and IPv6 address hosts
+* [karlwilbur] - Add Rubocop, `.editorconfig`; code cleanup/linting
+
+# 1.8.0 (2019-06-14)
+
+* [karlwilbur] - Refactor class methods for readability
+* [karlwilbur] - `gemspec` meta updates
+* [karlwilbur] - Use POSIX classes for better performance
+* [karlwilbur] - Refactored tests to check specical characters one at a time
+* [karlwilbur] - Refactored validation regex to be more techincally correct
+* [karlwilbur] - Add this `CHANGELOG`
+
+# 1.7.0 (2019-04-20)
+
+* [karlwilbur] - Added test coverage badge to README
+* [karlwilbur] - Added I18n directive to remove warning message in testing
+* [karlwilbur] - Added RFC-2822 reference
+* [karlwilbur] - Ignore local rspec config file
+* [karlwilbur] - Check for invalid double dots in strict mode
+* [karlwilbur] - Updated spec_helper to remove Code Climate Test Reporter; it is to be run separately now
+* [karlwilbur] - Allow leading/trailing whitespace in normal, not strict
+* [karlwilbur] - Added `invalid?` as inverse of `valid?`
+* [karlwilbur] - Add the ability to limit to a domain
+* [karlwilbur] - Removed CodeShip badge
+* [karlwilbur] - Make the dot in the domain part non-conditional
+* [karlwilbur] - Fix domain label pattern to allow numbers per rfc5321
+
+# 1.6.0 (2015-06-14)
+
+* [karlwilbur] - Fixed validation to be closer to RFC-5321
+* [karlwilbur] - Updated specs to use Rspec 3 syntax
+* [karlwilbur] - Added unicode suport to validation regexp
+* [karlwilbur] - Added class access to regexp, and `valid?` calss method
+* [karlwilbur] - Simplified code using new methods
+* [karlwilbur] - Added CodeClimate and SimpleCov
+* [karlwilbur] - Updated version and contact info
+
+*** Forked from https://github.com/balexand/email_validator
+
+# 2.0.1 (2019-03-09)
+
+* Add email value to error details [f1sherman #50]
+* CI doesn't test Ruby versions that no longer receive updates [f1sherman #51]
+
+# 2.0.0 (2019-03-02)
+
+* Looser validation [#49]
+
+# 1.6.0 (2015-05-12)
+
+* Unicode characters support [i7an #24]
+
+# 1.5.0 (2014-12-08)
+
+* Add a class method for simpler validation [TiteiKo and cluesque #19]
+* RSpec 3.0 syntax [strivedi183 #17]
+* Create Changes.md
+
+- - -
+Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
+
+The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.
+

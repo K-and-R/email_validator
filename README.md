@@ -1,6 +1,20 @@
 [![Build Status](https://secure.travis-ci.org/balexand/email_validator.svg)](http://travis-ci.org/balexand/email_validator)
+[![Code Climate](https://codeclimate.com/github/karlwilbur/email_validator/badges/gpa.svg)](https://codeclimate.com/github/karlwilbur/email_validator)
+[![Test Coverage](https://codeclimate.com/github/karlwilbur/email_validator/badges/coverage.svg)](https://codeclimate.com/github/karlwilbur/email_validator/coverage)
 
-## Usage
+# EmailValidator
+
+An email validator for Rails 3+.
+
+Supports RFC-2822-compliant and RFC-5321-compliant email validation.
+
+Originally forked from: https://github.com/balexand/email_validator
+
+## Validation philosophy
+
+The default validation provided by this gem is extremely loose. It just checks that there's an `@` with something before and after it. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643) for an explanation of why.
+
+## Installation
 
 Add to your Gemfile:
 
@@ -14,42 +28,99 @@ Run:
 bundle install
 ```
 
-Then add the following to your model:
+## Usage
+
+Add the following to your model:
 
 ```ruby
 validates :my_email_attribute, email: true
 ```
 
-## Validation outside a model
-
-If you'd like to validate an email outside of a model then here are some class methods that you can use:
+You may wish to allow domains without a FDQN, like `user@somehost`. While this is technically a valid address, it is uncommon to consider such address valid. We will consider them invalid by default but this can be allowed by setting `require_fqdn: false`:
 
 ```ruby
-EmailValidator.regexp # returns the regex
-EmailValidator.valid?('narf@example.com') # => true
-EmailValidator.invalid?('narf@example.com') # => false
+validates :my_email_attribute, email: {require_fqdn: false}
 ```
 
-## Validation philosophy
-
-The validation provided by this gem is loose. It just checks that there's an `@` with something before and after it. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643) for an explanation of why.
-
-## Trimming whitespace
-
-Your users may accidentally submit leading or trailing whitespace when submitting a form. You may want to automatically trim this. This is not the job of a validator gem but it's trivial to implement yourself by adding a setter in your model:
+You can also limit to a single domain (e.g: this might help if you have separate `User` and `AdminUser` models and want to ensure that `AdminUser` emails are on a specific domain):
 
 ```ruby
-def email=(e)
-  e = e.strip if e
-  super
+validates :my_email_attribute, email: {domain: 'example.com'}
+```
+
+## Configuration
+
+Default configuration can be overridden by setting options in `config/initializers/email_validator.rb`:
+
+```ruby
+if defined?(EmailValidator)
+  # To completly override the defaults
+  EmailValidator.default_options = {
+    :allow_nil => false,
+    :domain => nil,
+    :require_fqdn => true,
+    :strict_mode => false
+  }
+
+  # or just a few options
+  EmailValidator.default_options.merge!({ :domain => 'mydomain.com' })
 end
 ```
 
-You may also want to convert emails to lowercase in the same way.
+### Strict mode
 
-## Alternative gems
+Normal mode basically checks for a properly sized mailbox label and a single "@" symbol with a properly formatted FQDN. In order to have stricter validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html)) enable strict mode. You can do this globally by requiring `email_validator/strict` in your `Gemfile`, by setting the options in `config/initializers/email_validator.rb`, or you can do this in a specific `validates` call.
 
-Do you prefer a different email validation gem? If so, open an issue with a brief explanation of how it differs from this gem. I'll add a link to it in this README.
+* `Gemfile`:
+
+  ```ruby
+  gem 'email_validator', github: 'karlwilbur/email_validator', :require => 'email_validator/strict'
+  ```
+
+* `config/initializers/email_validator.rb`:
+
+  ```ruby
+  if defined?(EmailValidator)
+    EmailValidator.default_options[:strict_mode] = true
+  end
+  ```
+
+* `validates` call:
+
+  ```ruby
+  validates :my_email_attribute, email: {strict_mode: true}
+  ```
+
+## Validation outside a model
+
+If you need to validate an email outside a model, you can get the regexp:
+
+### Normal mode
+
+```ruby
+EmailValidator.valid?('narf@example.com') # boolean
+```
+
+### Requiring a FQDN
+
+```ruby
+EmailValidator.valid?('narf@somehost') # boolean false
+EmailValidator.invalid?('narf@somehost', require_fqdn: false) # boolean true
+```
+
+### Requiring a specific domain
+
+```ruby
+EmailValidator.valid?('narf@example.com', domain: 'foo.com') # boolean false
+EmailValidator.invalid?('narf@example.com', domain: 'foo.com') # boolean true
+```
+
+### Strict mode
+
+```ruby
+EmailValidator.regexp(strict_mode: true) # returns the regex
+EmailValidator.valid?('narf@example.com', strict_mode: true) # boolean
+```
 
 ## Thread safety
 
