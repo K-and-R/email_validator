@@ -17,3 +17,7 @@ branches:
   only:
     - master
     - develop
+before_install:
+  # ensure that we are building/testing againt the newest depencency versions
+  - rm Gemfile.lock
+bundler_args: --without development
