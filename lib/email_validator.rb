@@ -1,20 +1,22 @@
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
 class EmailValidator < ActiveModel::EachValidator
-  DEFAULT_OPTIONS = {
+  @@default_options = {
     :allow_nil => false,
     :domain => nil,
-    :require_fqdn => true,
+    :require_fqdn => nil,
     :mode => :loose
-  }.freeze
+  }
 
   class << self
     def default_options
-      EmailValidator::DEFAULT_OPTIONS
+      @@default_options
     end
 
     def valid?(value, options = {})
-      options = default_options.merge(options)
-      !!((value.present? || value.nil? && options[:allow_nil].present?) && value =~ regexp(options))
+      options = parse_options(options)
+      return true if value.nil? && options[:allow_nil] == true
+      return false if value.nil?
+      !!(value =~ regexp(options))
     end
 
     def invalid?(value, options = {})
@@ -25,17 +27,12 @@ class EmailValidator < ActiveModel::EachValidator
     #  https://tools.ietf.org/html/rfc2822 : 3.2. Lexical Tokens, 3.4.1. Addr-spec specification
     #  https://tools.ietf.org/html/rfc5321 : 4.1.2.  Command Argument Syntax
     def regexp(options = {})
-      return /[^\s]+@[^\s]+/ if options[:mode] == :loose
-
-      options = default_options.merge(options)
-
-      if options[:mode] == :strict
-        # validate local part
-        /\A(?>#{local_part_pattern})@#{domain_pattern(options)}\z/i
-      else
-        # no spaces or '@' in local part
-        /\A\s*(?>[^@\s]{1,64})@#{domain_pattern(options)}\s*\z/i
+      options = parse_options(options)
+      if options[:mode] == :loose
+        return /\A[^\s]+@[^\s]+\z/ if options[:domain].nil?
+        return /\A[^\s]+@#{domain_pattern(options)}\z/
       end
+      /\A(?>#{local_part_pattern})@#{domain_pattern(options)}\z/i
     end
 
     protected
@@ -81,14 +78,22 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     def domain_pattern(options)
-      domain_pattern = options[:domain].sub(/\./, '\.') if options[:domain].present?
-      domain_pattern ||= "(?:#{label_pattern}\\.)+#{label_pattern}" if options[:require_fqdn]
-      domain_pattern || "(?:#{address_literal}|(?:#{label_pattern}\\.)*#{label_pattern})"
+      return options[:domain].sub(/\./, '\.') if options[:domain].present?
+      return "(?:#{label_pattern}\\.)+#{label_pattern}" if options[:require_fqdn]
+      "(?:#{address_literal}|(?:#{label_pattern}\\.)*#{label_pattern})"
+    end
+
+    private
+
+    def parse_options(options)
+      # `:moderate` mode enables `:require_fqdn`, unless it is already explicitly disabled
+      options[:require_fqdn] = true if options[:require_fqdn].nil? && options[:mode] == :moderate
+      default_options.merge(options)
     end
   end
 
   def validate_each(record, attribute, value)
-    options = EmailValidator::DEFAULT_OPTIONS.merge(self.options)
+    options = @@default_options.merge(self.options)
     record.errors.add(attribute, options[:message] || :invalid) unless self.class.valid?(value, options)
   end
 end

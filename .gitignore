@@ -29,6 +29,6 @@ tmtags
 .\#*
 *.swp
 
-# SimpleCov artifcts
+# SimpleCov artifacts
 coverage
 

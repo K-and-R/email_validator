@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rubygems'
+require 'pry'
 require 'rspec'
 require 'active_model'
 
@@ -20,11 +21,10 @@ class TestModel
   def initialize(attributes = {})
     @attributes = attributes
   end
-  
+
   def read_attribute_for_validation(key)
     @attributes[key]
   end
 end
 
 RSpec.configure(&:disable_monkey_patching!)
-

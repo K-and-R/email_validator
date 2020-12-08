@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 # 2.1.0 (TDB)
 
-* [karlwilbur] - Add `:mode` config option; default to `:loose`
+* [karlwilbur] - Add `:mode` config option; values `:loose`, `:moderate`, `:strict`; default to `:loose`
 
 # 1.9.0.pre (2020-10-14)
 
