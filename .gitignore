@@ -1,6 +1,7 @@
 
 # Build artifacts
 *.gem
+*.rbc
 
 # Bundler artifacts
 .bundle
@@ -15,6 +16,7 @@ yarn-debug.log*
 rdoc
 pkg
 .rspec
+.config
 .env
 
 # OS artifacts

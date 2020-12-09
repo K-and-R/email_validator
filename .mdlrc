@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+
+# Markdownlint style file
+# File syntax: Ruby
+#
+# This file is used by the version of Markdownlint in the CodeClimate image:
+#    `codeclimate/codeclimate-markdownlint`
+#
+# It can also be used by the `markdownlint` gem when run directly, outside of
+# CodeClimate.
+#
+
+style './.markdownlint.style.rb'
