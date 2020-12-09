@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# `CC_TEST_REPORTER_ID` should be defined is `.env`. Its value is the
+# `TEST REPORTER ID` obtained here:
+# https://codeclimate.com/repos/5f874a7355b6af500d008806/settings/test_reporter
+. .env
+# cc-test-reporter format-coverage
+# cc-test-reporter upload-coverage coverage/codeclimate.json -r ${CC_TEST_REPORTER_ID}
+cc-test-reporter after-build
