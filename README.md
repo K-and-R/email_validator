@@ -1,6 +1,6 @@
 # EmailValidator
 
-[![Build Status](https://secure.travis-ci.org/K-and-R/email_validator.svg?branch=master)](http://travis-ci.org/K-and-R/email_validator)
+[![Build Status](https://secure.travis-ci.com/K-and-R/email_validator.svg?branch=master)](http://travis-ci.com/K-and-R/email_validator)
 [![Code Climate](https://codeclimate.com/github/karlwilbur/email_validator/badges/gpa.svg)](https://codeclimate.com/github/karlwilbur/email_validator)
 [![Test Coverage](https://codeclimate.com/github/karlwilbur/email_validator/badges/coverage.svg)](https://codeclimate.com/github/karlwilbur/email_validator/coverage)
 
