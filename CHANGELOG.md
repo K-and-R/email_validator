@@ -5,12 +5,9 @@ This file is used to list changes made in `email_validator`.
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## (TBD)
-
-* [karlwilbur] - Add linters and commit hooks to validate code prior to commits
-
 ## 2.1.0 (2020-12-09)
 
+* [karlwilbur] - Add linters and commit hooks to validate code prior to commits
 * [karlwilbur] - Add `:mode` config option; values `:loose`, `:moderate`, `:strict`; default to `:loose`
 * [karlwilbur] - Merge in changes from <https://github.com/karlwilbur/email_validator> fork
 

@@ -189,7 +189,10 @@ EmailValidator.valid?('narf@example.com', mode: :strict) # boolean
 
 ## Thread safety
 
-This gem is thread safe.
+This gem is thread safe, with one caveat: `EmailValidator.default_options` must
+be configured before use in a multi-threaded environment. If you configure
+`default_options` in a Rails initializer file, then you're good to go since
+initializers are run before worker threads are spawned.
 
 ## Alternative gems
 
