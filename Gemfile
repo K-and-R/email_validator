@@ -4,7 +4,7 @@
 if File.exist?(File.expand_path('.rubygems-proxy-url', __dir__))
   rubygems_url = File.read(
     File.expand_path('../.rubygems-proxy-url', __dir__),
-    mode: 'rb'
+    :mode => 'rb'
   ).chomp
 end
 # rubocop:disable Style/IfUnlessModifier

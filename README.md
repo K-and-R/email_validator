@@ -12,9 +12,16 @@ Formerly found at: <https://github.com/balexand/email_validator>
 
 ## Validation philosophy
 
-The default validation provided by this gem (the `:loose` configuration option) is extremely loose. It just checks that there's an `@` with something before and after it without any whitespace. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643) for an explanation of why.
+The default validation provided by this gem (the `:loose` configuration option)
+is extremely loose. It just checks that there's an `@` with something before and
+after it without any whitespace. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643)
+for an explanation of why.
 
-We understand that maybe use cases require more stricy validation and this is supported by using the `:moderate` validation mode. Additionally, the `:strict` RFC-compliant mode will consider technically valid emails address as valid which may not be wanted, such as the valid `user` or `user@somehost` addresses. These would be valid in `:strict` mode but not valid in `:loose` or `:moderate`.
+We understand that maybe use cases require more stricy validation and this is
+supported by using the `:moderate` validation mode. Additionally, the `:strict`
+RFC-compliant mode will consider technically valid emails address as valid which
+may not be wanted, such as the valid `user` or `user@somehost` addresses. These
+would be valid in `:strict` mode but not valid in `:loose` or `:moderate`.
 
 ## Installation
 
@@ -26,7 +33,7 @@ gem 'email_validator'
 
 Run:
 
-```
+```bash
 bundle install
 ```
 
@@ -38,13 +45,18 @@ Add the following to your model:
 validates :my_email_attribute, email: true
 ```
 
-You may wish to allow domains without a FDQN, like `user@somehost`. While this is technically a valid address, it is uncommon to consider such address valid. We will consider them valid by default with the `:loose` checking. Disallowed by setting `require_fqdn: true` or by enabling `:moderate` checking:
+You may wish to allow domains without a FDQN, like `user@somehost`. While this
+is technically a valid address, it is uncommon to consider such address valid.
+We will consider them valid by default with the `:loose` checking. Disallowed
+by setting `require_fqdn: true` or by enabling `:moderate` checking:
 
 ```ruby
 validates :my_email_attribute, email: {mode: :moderate, require_fqdn: true}
 ```
 
-You can also limit to a single domain (e.g: this might help if, for example, you have separate `User` and `AdminUser` models and want to ensure that `AdminUser` emails are on a specific domain):
+You can also limit to a single domain (e.g: this might help if, for example, you
+have separate `User` and `AdminUser` models and want to ensure that `AdminUser`
+emails are on a specific domain):
 
 ```ruby
 validates :my_email_attribute, email: {domain: 'example.com'}
@@ -71,13 +83,22 @@ end
 
 ### Loose mode
 
-This it the default validation mode of this gem. It is intentionally extremely loose (see the [Validation Philosophy section](#validation_philosophy) above. It just checks that there's an `@` with something before and after it without any whitespace. The `:domain` and `:require_fqdn` option are ignored in `:loose` mode.
+This it the default validation mode of this gem. It is intentionally extremely
+loose (see the [Validation Philosophy section](#validation_philosophy) above. It
+just checks that there's an `@` with something before and after it without any
+whitespace. The `:domain` and `:require_fqdn` option are ignored in `:loose` mode.
 
 ### Moderate mode
 
-Enabling `:moderate` checking will check for a "normal" email format that would be expected in most common everyday usage. Moderate mode basically checks for a properly sized and formatted mailbox label, a single "@" symbol, and a properly sized and formatted FQDN. Enabling `:moderate` mode will also enable `:require_fqdn` configuration option.
+Enabling `:moderate` checking will check for a "normal" email format that would
+be expected in most common everyday usage. Moderate mode basically checks for a
+properly sized and formatted mailbox label, a single "@" symbol, and a properly
+sized and formatted FQDN. Enabling `:moderate` mode will also enable `:require_fqdn`
+configuration option.
 
-Moderate mode can be enabled globally by requiring `email_validator/moderate` in your `Gemfile`, by setting the option in `config/initializers/email_validator.rb`, or by specifying the option in a specific `validates` call.
+Moderate mode can be enabled globally by requiring `email_validator/moderate` in
+your `Gemfile`, by setting the option in `config/initializers/email_validator.rb`,
+or by specifying the option in a specific `validates` call.
 
 * `Gemfile`:
 
@@ -101,9 +122,12 @@ Moderate mode can be enabled globally by requiring `email_validator/moderate` in
 
 ### Strict mode
 
-In order to have stricter validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html)) enable `:strict` mode.
+In order to have stricter validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html))
+enable `:strict` mode.
 
-You can do this globally by requiring `email_validator/strict` in your `Gemfile`, by setting the options in `config/initializers/email_validator.rb`, or you can do this in a specific `validates` call.
+You can do this globally by requiring `email_validator/strict` in your `Gemfile`,
+by setting the options in `config/initializers/email_validator.rb`, or you can do
+this in a specific `validates` call.
 
 * `Gemfile`:
 
@@ -169,14 +193,16 @@ This gem is thread safe.
 
 ## Alternative gems
 
-Do you prefer a different email validation gem? If so, open an issue with a brief explanation of how it differs from this gem. I'll add a link to it in this README.
+Do you prefer a different email validation gem? If so, open an issue with a brief
+explanation of how it differs from this gem. I'll add a link to it in this README.
 
-* [`email_address`](https://github.com/afair/email_address) (https://github.com/K-and-R/email_validator/issues/58)
-* [`email_verifier`](https://github.com/kamilc/email_verifier) (https://github.com/K-and-R/email_validator/issues/65)
+* [`email_address`](https://github.com/afair/email_address) (<https://github.com/K-and-R/email_validator/issues/58>)
+* [`email_verifier`](https://github.com/kamilc/email_verifier) (<https://github.com/K-and-R/email_validator/issues/65>)
 
 ## Maintainers
 
-All thanks is given to [Brian Alexander (balexand)](https://github.com/balexand) for is initial work on this gem.
+All thanks is given to [Brian Alexander (balexand)](https://github.com/balexand)
+for is initial work on this gem.
 
 Currently maintained by:
 

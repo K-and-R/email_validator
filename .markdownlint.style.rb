@@ -35,7 +35,7 @@ rule 'MD002'
 # Default: always use the same header style of any of the allowed header styles
 #
 # Headers should use the `#` ('atx') style headers
-rule 'MD003', style: :atx
+rule 'MD003', :style => :atx
 
 # MD004 - Unordered list style
 # Default: always use the same character (any one of `*`,`+`,`-`)
@@ -56,7 +56,7 @@ rule 'MD006'
 # Default: 2 spaces
 #
 # Use 4 spaces because using 2 doesn't always render a sublist.
-rule 'MD007', indent: 4
+rule 'MD007', :indent => 4
 
 # No rule MD008
 
@@ -81,7 +81,7 @@ rule 'MD012'
 # Default: Max 80 characters per line
 #
 # Set line length limit to 120 characters (default: 80 characters)
-rule 'MD013', line_length: 120, code_blocks: false
+rule 'MD013', :line_length => 120, :code_blocks => false
 
 # MD014 - Dollar signs used before commands without showing output
 # Default: No dollars signs before shell commands w/o showing shell output
@@ -118,7 +118,7 @@ rule 'MD023'
 
 # MD024 - Multiple headers with the same content
 # Default: No multiple headers with same content, no duplicate header text
-rule 'MD024', allow_different_nesting: true
+rule 'MD024', :allow_different_nesting => true
 
 # MD025 - Multiple top level headers in the same document
 # Default: The is onlt one level 1 header; it's the title of the document
@@ -140,7 +140,7 @@ rule 'MD028'
 # Default:
 #
 # ordered list item prefix, should be ordered
-rule 'MD029', style: :ordered
+rule 'MD029', :style => :ordered
 
 # MD030 - Spaces after list markers
 # Default: Only one space character after a list marker
@@ -166,7 +166,7 @@ rule 'MD034'
 # Default: Be consistent, use only one of `---`, `- - -`, `***`, or `* * *`
 #
 # We want to enforce `---`
-rule 'MD035', style: '---'
+rule 'MD035', :style => '---'
 
 # MD036 - Emphasis used instead of a header
 # Default: Do not use emphasis (bold, italic, etc) as header, use actual headers
@@ -222,4 +222,3 @@ rule 'MD046'
 # # MD047 - Files should end with a single newline character
 # # Default: Requires newline at end of file
 # rule 'MD047'
-

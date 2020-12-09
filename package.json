@@ -1,0 +1,59 @@
+{
+  "name": "email_validator",
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0",
+    "yarn": ">=1.17.3"
+  },
+  "dependencies": {
+  },
+  "version": "2.1.0",
+  "devDependencies": {
+    "editorconfig-checker": "^3.0.3",
+    "husky": "^2.0.0",
+    "lint-staged": "^6.0.0",
+    "markdownlint": "^0.16.0",
+    "markdownlint-cli": "^0.18.0",
+    "prettier": "^1.11.0",
+    "yaml-lint": "^1.2.4"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{json,graphql}": [
+        "prettier"
+      ],
+      "*.md": [
+        "bundle exec mdl"
+      ],
+      "{Gemfile,*.{rb,erb}}": [
+        "bundle exec rubocop --force-exclusion"
+      ],
+      "*.{yml,yaml}": [
+        "yamllint"
+      ],
+      "*": [
+        "editorconfig-checker -exclude '/^.*.lock$/'"
+      ]
+    },
+    "ignore": [
+      "**/dist/*.min.js",
+      "**/node_modules/*",
+      "**/vendor/*"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run test-rb && lint-staged"
+    }
+  },
+  "scripts": {
+    "lint-rb": "bundle exec rubocop .",
+    "lint-md": "bundle exec mdl --git-recurse node_modules . ",
+    "lint-yaml": "yamllint ./**/*.{yml,yaml}",
+    "lint": "yarn run lint-rb && yarn run lint-md && yarn run lint-yaml && editorconfig-checker",
+    "ruby-tests": "bundle exec rspec .",
+    "test": "yarn run tests",
+    "tests": "yarn run lint && yarn run ruby-tests",
+    "test-rb": "yarn run ruby-tests"
+  }
+}

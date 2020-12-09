@@ -2,4 +2,3 @@
 
 require 'email_validator'
 EmailValidator.default_options[:mode] = :strict
-

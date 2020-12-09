@@ -1,11 +1,13 @@
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
 class EmailValidator < ActiveModel::EachValidator
+  # rubocop:disable Style/ClassVars
   @@default_options = {
     :allow_nil => false,
     :domain => nil,
     :require_fqdn => nil,
     :mode => :loose
   }
+  # rubocop:enable Style/ClassVars
 
   class << self
     def default_options

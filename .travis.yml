@@ -19,5 +19,5 @@ branches:
     - develop
 before_install:
   # ensure that we are building/testing againt the newest depencency versions
-  - rm Gemfile.lock
+  - rm -f Gemfile.lock
 bundler_args: --without development

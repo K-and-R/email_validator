@@ -505,7 +505,7 @@ RSpec.describe EmailValidator do
         'test@',
         '@missing-local.dev',
         ' ',
-        'missing-at-sign.dev',
+        'missing-at-sign.dev'
       ].each do |email|
         context 'when using defaults' do
           it "#{email} should not be valid" do
@@ -573,7 +573,7 @@ RSpec.describe EmailValidator do
       ]}).concat([
         'user..-with-double-dots@example.com',
         '.user-beginning-with-dot@example.com',
-        'user-ending-with-dot.@example.com',
+        'user-ending-with-dot.@example.com'
       ]).flatten.each do |email|
         context 'when using defaults' do
           it "#{email.strip} in a model should be valid" do
