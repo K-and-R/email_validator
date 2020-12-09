@@ -6,7 +6,7 @@
 
 An email validator for Rails 3+.
 
-Supports RFC-2822-compliant and RFC-5321-compliant email validation.
+Supports RFC-2822-compliant and RFC-5321-compliant email validation using RFC-3696 validation.
 
 Formerly found at: <https://github.com/balexand/email_validator>
 
@@ -17,11 +17,11 @@ is extremely loose. It just checks that there's an `@` with something before and
 after it without any whitespace. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643)
 for an explanation of why.
 
-We understand that maybe use cases require more stricy validation and this is
-supported by using the `:moderate` validation mode. Additionally, the `:strict`
+We understand that many use cases require an increased level of validation. This
+is supported by using the `:strict` validation mode. Additionally, the `:rfc`
 RFC-compliant mode will consider technically valid emails address as valid which
 may not be wanted, such as the valid `user` or `user@somehost` addresses. These
-would be valid in `:strict` mode but not valid in `:loose` or `:moderate`.
+would be valid in `:rfc` mode but not valid in `:loose` or `:strict`.
 
 ## Installation
 
@@ -48,10 +48,10 @@ validates :my_email_attribute, email: true
 You may wish to allow domains without a FDQN, like `user@somehost`. While this
 is technically a valid address, it is uncommon to consider such address valid.
 We will consider them valid by default with the `:loose` checking. Disallowed
-by setting `require_fqdn: true` or by enabling `:moderate` checking:
+by setting `require_fqdn: true` or by enabling `:strict` checking:
 
 ```ruby
-validates :my_email_attribute, email: {mode: :moderate, require_fqdn: true}
+validates :my_email_attribute, email: {mode: :strict, require_fqdn: true}
 ```
 
 You can also limit to a single domain (e.g: this might help if, for example, you
@@ -86,53 +86,24 @@ end
 This it the default validation mode of this gem. It is intentionally extremely
 loose (see the [Validation Philosophy section](#validation_philosophy) above. It
 just checks that there's an `@` with something before and after it without any
-whitespace. The `:domain` and `:require_fqdn` option are ignored in `:loose` mode.
+whitespace.
 
-### Moderate mode
+### Strict mode
 
-Enabling `:moderate` checking will check for a "normal" email format that would
-be expected in most common everyday usage. Moderate mode basically checks for a
+Enabling `:strict` checking will check for a "normal" email format that would
+be expected in most common everyday usage. Strict mode basically checks for a
 properly sized and formatted mailbox label, a single "@" symbol, and a properly
-sized and formatted FQDN. Enabling `:moderate` mode will also enable `:require_fqdn`
+sized and formatted FQDN. Enabling `:strict` mode will also enable `:require_fqdn`
 configuration option.
 
-Moderate mode can be enabled globally by requiring `email_validator/moderate` in
+Strict mode can be enabled globally by requiring `email_validator/strict` in
 your `Gemfile`, by setting the option in `config/initializers/email_validator.rb`,
 or by specifying the option in a specific `validates` call.
 
 * `Gemfile`:
 
   ```ruby
-  gem 'email_validator', github: 'karlwilbur/email_validator', require: 'email_validator/moderate'
-  ```
-
-* `config/initializers/email_validator.rb`:
-
-  ```ruby
-  if defined?(EmailValidator)
-    EmailValidator.default_options[:mode] = :moderate
-  end
-  ```
-
-* `validates` call:
-
-  ```ruby
-  validates :my_email_attribute, email: {mode: :moderate}
-  ```
-
-### Strict mode
-
-In order to have stricter validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html))
-enable `:strict` mode.
-
-You can do this globally by requiring `email_validator/strict` in your `Gemfile`,
-by setting the options in `config/initializers/email_validator.rb`, or you can do
-this in a specific `validates` call.
-
-* `Gemfile`:
-
-  ```ruby
-  gem 'email_validator', github: 'karlwilbur/email_validator', require: 'email_validator/strict'
+  gem 'email_validator', require: 'email_validator/strict'
   ```
 
 * `config/initializers/email_validator.rb`:
@@ -147,6 +118,35 @@ this in a specific `validates` call.
 
   ```ruby
   validates :my_email_attribute, email: {mode: :strict}
+  ```
+
+### RFC mode
+
+In order to have RFC-compliant validation (according to [http://www.remote.org/jochen/mail/info/chars.html](https://web.archive.org/web/20150508102948/http://www.remote.org/jochen/mail/info/chars.html)),
+enable `:rfc` mode.
+
+You can do this globally by requiring `email_validator/rfc` in your `Gemfile`,
+by setting the options in `config/initializers/email_validator.rb`, or you can do
+this in a specific `validates` call.
+
+* `Gemfile`:
+
+  ```ruby
+  gem 'email_validator', require: 'email_validator/rfc'
+  ```
+
+* `config/initializers/email_validator.rb`:
+
+  ```ruby
+  if defined?(EmailValidator)
+    EmailValidator.default_options[:mode] = :rfc
+  end
+  ```
+
+* `validates` call:
+
+  ```ruby
+  validates :my_email_attribute, email: {mode: :rfc}
   ```
 
 ## Validation outside a model
@@ -173,18 +173,18 @@ EmailValidator.valid?('narf@example.com', domain: 'foo.com') # boolean false
 EmailValidator.invalid?('narf@example.com', domain: 'foo.com') # boolean true
 ```
 
-### Moderate mode
-
-```ruby
-EmailValidator.regexp(mode: :moderate) # returns the regex
-EmailValidator.valid?('narf@example.com', mode: :moderate) # boolean
-```
-
 ### Strict mode
 
 ```ruby
 EmailValidator.regexp(mode: :strict) # returns the regex
 EmailValidator.valid?('narf@example.com', mode: :strict) # boolean
+```
+
+### RFC mode
+
+```ruby
+EmailValidator.regexp(mode: :rfc) # returns the regex
+EmailValidator.valid?('narf@example.com', mode: :rfc) # boolean
 ```
 
 ## Thread safety

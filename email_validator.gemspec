@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'email_validator'
-  s.version = '2.1.0'
+  s.version = '2.2.0'
   s.authors = ['Brian Alexander', 'Karl Wilbur']
   s.summary = 'An email validator for Rails 3+.'
   s.description = 'An email validator for Rails 3+. See homepage for details: http://github.com/K-and-R/email_validator'
