@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'An email validator for Rails 3+. See homepage for details: http://github.com/K-and-R/email_validator'
   s.email = 'karl@kandrsoftware.com'
   s.homepage = 'https://github.com/K-and-R/email_validator'
-
+  s.licenses = ['MIT']
   s.extra_rdoc_files = %w[
     LICENSE
     README.md
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   ]
   s.require_paths = %w[lib]
 
-  s.test_files = `git ls-files -- spec/*`.split('\n')
+  s.test_files = `git ls-files -- spec/*`.split("\n")
 
   # This gem will work with 2.4.0 or greater... but *should* work with 1.8.7+
   s.required_ruby_version = '>= 2.4.0'
