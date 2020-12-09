@@ -45,7 +45,7 @@ Add the following to your model:
 validates :my_email_attribute, email: true
 ```
 
-You may wish to allow domains without a FDQN, like `user@somehost`. While this
+You may wish to allow domains without a FQDN, like `user@somehost`. While this
 is technically a valid address, it is uncommon to consider such address valid.
 We will consider them valid by default with the `:loose` checking. Disallowed
 by setting `require_fqdn: true` or by enabling `:strict` checking:
