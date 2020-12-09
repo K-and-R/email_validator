@@ -4,52 +4,52 @@ class DefaultUser < TestModel
   validates :email, :email => true
 end
 
-class ModerateUser < TestModel
-  validates :email, :email => { :mode => :moderate }
-end
-
 class StrictUser < TestModel
   validates :email, :email => { :mode => :strict }
+end
+
+class RfcUser < TestModel
+  validates :email, :email => { :mode => :rfc }
 end
 
 class AllowNilDefaultUser < TestModel
   validates :email, :email => { :allow_nil => true }
 end
 
-class AllowNilModerateUser < TestModel
-  validates :email, :email => { :allow_nil => true, :mode => :moderate }
-end
-
 class AllowNilStrictUser < TestModel
   validates :email, :email => { :allow_nil => true, :mode => :strict }
+end
+
+class AllowNilRfcUser < TestModel
+  validates :email, :email => { :allow_nil => true, :mode => :rfc }
 end
 
 class DisallowNilDefaultUser < TestModel
   validates :email, :email => { :allow_nil => false }
 end
 
-class DisallowNilModerateUser < TestModel
-  validates :email, :email => { :allow_nil => false, :mode => :moderate }
-end
-
 class DisallowNilStrictUser < TestModel
   validates :email, :email => { :allow_nil => false, :mode => :strict }
 end
 
-class DomainModerateUser < TestModel
-  validates :email, :email => { :domain => 'example.com', :mode => :moderate }
+class DisallowNilRfcUser < TestModel
+  validates :email, :email => { :allow_nil => false, :mode => :rfc }
 end
 
 class DomainStrictUser < TestModel
   validates :email, :email => { :domain => 'example.com', :mode => :strict }
 end
 
-class NonFqdnModerateUser < TestModel
-  validates :email, :email => { :require_fqdn => false, :mode => :moderate }
+class DomainRfcUser < TestModel
+  validates :email, :email => { :domain => 'example.com', :mode => :rfc }
 end
 
 class NonFqdnStrictUser < TestModel
   validates :email, :email => { :require_fqdn => false, :mode => :strict }
+end
+
+class NonFqdnRfcUser < TestModel
+  validates :email, :email => { :require_fqdn => false, :mode => :rfc }
 end
 
 class DefaultUserWithMessage < TestModel
@@ -99,9 +99,9 @@ RSpec.describe EmailValidator do
     valid_endable               = valid_special_chars
     invalid_includable          = { :at => '@' }
     whitespace                  = { :newline => "\n", :tab => "\t", :carriage_return => "\r", :space => ' ' }
-    moderatly_invalid_includable = invalid_special_chars
-    moderatly_invalid_beginable  = moderatly_invalid_includable.merge({ :dot => '.' })
-    moderatly_invalid_endable    = moderatly_invalid_beginable
+    strictly_invalid_includable = invalid_special_chars
+    strictly_invalid_beginable  = strictly_invalid_includable.merge({ :dot => '.' })
+    strictly_invalid_endable    = strictly_invalid_beginable
     domain_invalid_beginable    = invalid_special_chars.merge(valid_special_chars)
     domain_invalid_endable      = domain_invalid_beginable
     domain_invalid_includable   = domain_invalid_beginable.reject { |k, _v| k == :hyphen }
@@ -143,56 +143,56 @@ RSpec.describe EmailValidator do
         'areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca'
       ]).flatten.each do |email|
         context 'when using defaults' do
-          it "#{email} should be valid" do
+          it "'#{email}' should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
+          it "'#{email}' should be valid using EmailValidator.valid?" do
             expect(described_class).to be_valid(email)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
             expect(described_class).not_to be_invalid(email)
           end
 
-          it "#{email} should match the regexp" do
+          it "'#{email}' should match the regexp" do
             expect(!!(email.strip =~ described_class.regexp)).to be(true)
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email} should be valid" do
-            expect(ModerateUser.new(:email => email)).to be_valid
-          end
-
-          it "#{email} should be valid using EmailValidator.valid?" do
-            expect(described_class).to be_valid(email, :mode => :moderate)
-          end
-
-          it "#{email} should not be invalid using EmailValidator.valid?" do
-            expect(described_class).not_to be_invalid(email, :mode => :moderate)
-          end
-
-          it "#{email} should match the regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :moderate))).to be(true)
-          end
-        end
-
         context 'when in `:strict` mode' do
-          it "#{email} should be valid" do
+          it "'#{email}' should be valid" do
             expect(StrictUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
+          it "'#{email}' should be valid using EmailValidator.valid?" do
             expect(described_class).to be_valid(email, :mode => :strict)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should not be invalid using EmailValidator.valid?" do
             expect(described_class).not_to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email} should match the regexp" do
+          it "'#{email}' should match the regexp" do
             expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(true)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should be valid" do
+            expect(RfcUser.new(:email => email)).to be_valid
+          end
+
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(true)
           end
         end
       end
@@ -205,56 +205,56 @@ RSpec.describe EmailValidator do
         'someuser@somehost'
       ].each do |email|
         context 'when using defaults' do
-          it "#{email} should be valid" do
+          it "'#{email}' should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
+          it "'#{email}' should be valid using EmailValidator.valid?" do
             expect(described_class).to be_valid(email)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
             expect(described_class).not_to be_invalid(email)
           end
 
-          it "#{email} should match the regexp" do
+          it "'#{email}' should match the regexp" do
             expect(!!(email.strip =~ described_class.regexp)).to be(true)
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email} should not be valid" do
-            expect(ModerateUser.new(:email => email)).not_to be_valid
+        context 'when in `:strict` mode' do
+          it "'#{email}' should not be valid" do
+            expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :moderate)
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :strict)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :moderate)
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email} should not match the regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :moderate))).to be(false)
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
           end
         end
 
-        context 'when in `:strict` mode' do
-          it "#{email} should be valid" do
-            expect(StrictUser.new(:email => email)).to be_valid
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should be valid" do
+            expect(RfcUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
-            expect(described_class).to be_valid(email, :mode => :strict)
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :rfc)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
-            expect(described_class).not_to be_invalid(email, :mode => :strict)
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :rfc)
           end
 
-          it "#{email} should match the regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(true)
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(true)
           end
         end
       end
@@ -266,56 +266,56 @@ RSpec.describe EmailValidator do
         'bracketed-and-labeled-IPv6@[IPv6:abcd:ef01:1234:5678:9abc:def0:1234:5678]'
       ].each do |email|
         context 'when using defaults' do
-          it "#{email} should be valid" do
+          it "'#{email}' should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
+          it "'#{email}' should be valid using EmailValidator.valid?" do
             expect(described_class).to be_valid(email)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
             expect(described_class).not_to be_invalid(email)
           end
 
-          it "#{email} should match the regexp" do
+          it "'#{email}' should match the regexp" do
             expect(!!(email.strip =~ described_class.regexp)).to be(true)
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email} should not be valid" do
-            expect(ModerateUser.new(:email => email)).not_to be_valid
+        context 'when in `:strict` mode' do
+          it "'#{email}' should not be valid" do
+            expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :moderate)
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :strict)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :moderate)
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email} should not match the strict regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :moderate))).to be(false)
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
           end
         end
 
-        context 'when in `:strict` mode' do
-          it "#{email} should be valid" do
-            expect(StrictUser.new(:email => email)).to be_valid
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should be valid" do
+            expect(RfcUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
-            expect(described_class).to be_valid(email, :mode => :strict)
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :rfc)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
-            expect(described_class).not_to be_invalid(email, :mode => :strict)
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :rfc)
           end
 
-          it "#{email} should match the strict regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(true)
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(true)
           end
         end
       end
@@ -350,56 +350,56 @@ RSpec.describe EmailValidator do
         "user@example.com<script>alert('hello')</script>"
       ]).flatten.each do |email|
         context 'when using defaults' do
-          it "#{email} should be valid" do
+          it "'#{email}' should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
           end
 
-          it "#{email} should be valid using EmailValidator.valid?" do
+          it "'#{email}' should be valid using EmailValidator.valid?" do
             expect(described_class).to be_valid(email)
           end
 
-          it "#{email} should not be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
             expect(described_class).not_to be_invalid(email)
           end
 
-          it "#{email} should match the regexp" do
+          it "'#{email}' should match the regexp" do
             expect(!!(email.strip =~ described_class.regexp)).to be(true)
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email} should not be valid" do
-            expect(ModerateUser.new(:email => email)).not_to be_valid
-          end
-
-          it "#{email} should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :moderate)
-          end
-
-          it "#{email} should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :moderate)
-          end
-
-          it "#{email} should not match the strict regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :moderate))).to be(false)
-          end
-        end
-
         context 'when in `:strict` mode' do
-          it "#{email} should not be valid" do
+          it "'#{email}' should not be valid" do
             expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
             expect(described_class).not_to be_valid(email, :mode => :strict)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
             expect(described_class).to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email} should not match the strict regexp" do
+          it "'#{email}' should not match the regexp" do
             expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should not be valid" do
+            expect(RfcUser.new(:email => email)).not_to be_valid
+          end
+
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(false)
           end
         end
       end
@@ -443,56 +443,56 @@ RSpec.describe EmailValidator do
         "
       ]).flatten.each do |email|
         context 'when using defaults' do
-          it "#{email} should not be valid" do
+          it "'#{email}' should not be valid" do
             expect(DefaultUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
             expect(described_class).not_to be_valid(email)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
             expect(described_class).to be_invalid(email)
           end
 
-          it "#{email} should not match the regexp" do
+          it "'#{email}' should not match the regexp" do
             expect(!!(email =~ described_class.regexp)).to be(false)
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email} should not be valid" do
-            expect(ModerateUser.new(:email => email)).not_to be_valid
-          end
-
-          it "#{email} should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :moderate)
-          end
-
-          it "#{email} should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :moderate)
-          end
-
-          it "#{email} should not match the strict regexp" do
-            expect(!!(email =~ described_class.regexp(:mode => :moderate))).to be(false)
-          end
-        end
-
         context 'when in `:strict` mode' do
-          it "#{email} should not be valid" do
+          it "'#{email}' should not be valid" do
             expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
             expect(described_class).not_to be_valid(email, :mode => :strict)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
             expect(described_class).to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email} should not match the strict regexp" do
+          it "'#{email}' should not match the regexp" do
             expect(!!(email =~ described_class.regexp(:mode => :strict))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should not be valid" do
+            expect(RfcUser.new(:email => email)).not_to be_valid
+          end
+
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email =~ described_class.regexp(:mode => :rfc))).to be(false)
           end
         end
       end
@@ -508,67 +508,67 @@ RSpec.describe EmailValidator do
         'missing-at-sign.dev'
       ].each do |email|
         context 'when using defaults' do
-          it "#{email} should not be valid" do
+          it "'#{email}' should not be valid" do
             expect(DefaultUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
             expect(described_class).not_to be_valid(email)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
             expect(described_class).to be_invalid(email)
           end
 
-          it "#{email} should not match the regexp" do
+          it "'#{email}' should not match the regexp" do
             expect(!!(email.strip =~ described_class.regexp)).to be(false)
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email} should not be valid" do
-            expect(ModerateUser.new(:email => email)).not_to be_valid
-          end
-
-          it "#{email} should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :moderate)
-          end
-
-          it "#{email} should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :moderate)
-          end
-
-          it "#{email} should not match the strict regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :moderate))).to be(false)
-          end
-        end
-
         context 'when in `:strict` mode' do
-          it "#{email} should not be valid" do
+          it "'#{email}' should not be valid" do
             expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
-          it "#{email} should not be valid using EmailValidator.valid?" do
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
             expect(described_class).not_to be_valid(email, :mode => :strict)
           end
 
-          it "#{email} should be invalid using EmailValidator.invalid?" do
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
             expect(described_class).to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email} should not match the strict regexp" do
+          it "'#{email}' should not match the regexp" do
             expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should not be valid" do
+            expect(RfcUser.new(:email => email)).not_to be_valid
+          end
+
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(false)
           end
         end
       end
     end
 
-    context 'when given the moderatly invalid email' do
-      moderatly_invalid_includable.map { |k, v| [
+    context 'when given the strictly invalid email' do
+      strictly_invalid_includable.map { |k, v| [
         "include-#{v}-#{k}@invalid-characters-in-local.dev"
-      ]}.concat(moderatly_invalid_beginable.map { |k, v| [
+      ]}.concat(strictly_invalid_beginable.map { |k, v| [
         "#{v}start-with-#{k}@invalid-characters-in-local.dev"
-      ]}).concat(moderatly_invalid_endable.map { |k, v| [
+      ]}).concat(strictly_invalid_endable.map { |k, v| [
         "end-with-#{k}#{v}@invalid-characters-in-local.dev"
       ]}).concat([
         'user..-with-double-dots@example.com',
@@ -593,26 +593,8 @@ RSpec.describe EmailValidator do
           end
         end
 
-        context 'when in `:moderate` mode' do
-          it "#{email.strip} in a model should be valid" do
-            expect(ModerateUser.new(:email => email)).not_to be_valid
-          end
-
-          it "#{email.strip} should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :moderate)
-          end
-
-          it "#{email.strip} should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :moderate)
-          end
-
-          it "#{email.strip} should not match the strict regexp" do
-            expect(!!(email =~ described_class.regexp(:mode => :moderate))).to be(false)
-          end
-        end
-
         context 'when in `:strict` mode' do
-          it "#{email.strip} in a model should not be valid" do
+          it "#{email.strip} in a model should be valid" do
             expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
@@ -624,8 +606,26 @@ RSpec.describe EmailValidator do
             expect(described_class).to be_invalid(email, :mode => :strict)
           end
 
-          it "#{email.strip} should not match the strict regexp" do
+          it "#{email.strip} should not match the regexp" do
             expect(!!(email =~ described_class.regexp(:mode => :strict))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "#{email.strip} in a model should not be valid" do
+            expect(RfcUser.new(:email => email)).not_to be_valid
+          end
+
+          it "#{email.strip} should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :rfc)
+          end
+
+          it "#{email.strip} should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :rfc)
+          end
+
+          it "#{email.strip} should not match the regexp" do
+            expect(!!(email =~ described_class.regexp(:mode => :rfc))).to be(false)
           end
         end
       end
@@ -651,11 +651,11 @@ RSpec.describe EmailValidator do
           end
         end
 
-        context 'when in `"moderate` mode' do
-          let(:opts) { { :require_fqdn => false, :mode => :moderate } }
+        context 'when in `:strict` mode' do
+          let(:opts) { { :require_fqdn => false, :mode => :strict } }
 
           it 'is valid' do
-            expect(NonFqdnModerateUser.new(:email => email)).to be_valid
+            expect(NonFqdnStrictUser.new(:email => email)).to be_valid
           end
 
           it 'is valid using EmailValidator.valid?' do
@@ -671,11 +671,11 @@ RSpec.describe EmailValidator do
           end
         end
 
-        context 'when in `:strict` mode' do
-          let(:opts) { { :require_fqdn => false, :mode => :strict } }
+        context 'when in `:rfc` mode' do
+          let(:opts) { { :require_fqdn => false, :mode => :rfc } }
 
-          it 'is valid in strict mode' do
-            expect(NonFqdnStrictUser.new(:email => email)).to be_valid
+          it 'is valid' do
+            expect(NonFqdnRfcUser.new(:email => email)).to be_valid
           end
 
           it 'is valid using EmailValidator.valid?' do
@@ -686,7 +686,7 @@ RSpec.describe EmailValidator do
             expect(described_class).not_to be_invalid(email, opts)
           end
 
-          it 'does not match the strict regexp' do
+          it 'matches the regexp' do
             expect(!!(email =~ described_class.regexp(opts))).to be(true)
           end
         end
@@ -696,7 +696,7 @@ RSpec.describe EmailValidator do
         let(:email) { 'someuser@somehost.somedomain' }
 
         it 'is valid' do
-          expect(NonFqdnModerateUser.new(:email => email)).to be_valid
+          expect(NonFqdnStrictUser.new(:email => email)).to be_valid
         end
 
         # rubocop:disable RSpec/PredicateMatcher
@@ -713,8 +713,8 @@ RSpec.describe EmailValidator do
           expect(!!(email =~ described_class.regexp(opts))).to be(true)
         end
 
-        context 'when in `:strict` mode' do
-          let(:opts) { { :require_fqdn => false, :mode => :strict } }
+        context 'when in `:rfc` mode' do
+          let(:opts) { { :require_fqdn => false, :mode => :rfc } }
 
           # rubocop:disable RSpec/PredicateMatcher
           it 'is valid using EmailValidator.valid?' do
@@ -726,11 +726,11 @@ RSpec.describe EmailValidator do
           end
           # rubocop:enable RSpec/PredicateMatcher
 
-          it 'is valid in strict mode' do
-            expect(NonFqdnStrictUser.new(:email => email)).to be_valid
+          it 'is valid' do
+            expect(NonFqdnRfcUser.new(:email => email)).to be_valid
           end
 
-          it 'does not match the strict regexp' do
+          it 'matches the regexp' do
             expect(!!(email =~ described_class.regexp(opts))).to be(true)
           end
         end
@@ -740,7 +740,7 @@ RSpec.describe EmailValidator do
           let(:opts) { { :domain => domain } }
 
           it 'is not valid' do
-            expect(DomainModerateUser.new(:email => email)).not_to be_valid
+            expect(DomainStrictUser.new(:email => email)).not_to be_valid
           end
 
           it 'is not valid using EmailValidator.valid?' do
@@ -755,8 +755,8 @@ RSpec.describe EmailValidator do
             expect(!!(email =~ described_class.regexp(opts))).to be(false)
           end
 
-          context 'when in `:strict` mode' do
-            let(:opts) { { :domain => domain, :require_fqdn => false, :mode => :strict } }
+          context 'when in `:rfc` mode' do
+            let(:opts) { { :domain => domain, :require_fqdn => false, :mode => :rfc } }
 
             it 'is not valid using EmailValidator.valid?' do
               expect(described_class).not_to be_valid(email, opts)
@@ -767,7 +767,7 @@ RSpec.describe EmailValidator do
             end
 
             it 'is not valid' do
-              expect(DomainStrictUser.new(:email => email)).not_to be_valid
+              expect(DomainRfcUser.new(:email => email)).not_to be_valid
             end
 
             it 'does not match the regexp' do
@@ -817,55 +817,68 @@ RSpec.describe EmailValidator do
   end
 
   describe 'limited to a domain' do
-    context 'when in `:moderate` mode' do
+    context 'when in `:strict` mode' do
       it 'is not valid with mismatched domain' do
-        expect(DomainModerateUser.new(:email => 'user@not-matching.io')).not_to be_valid
-      end
-
-      it 'is valid with matching domain' do
-        expect(DomainModerateUser.new(:email => 'user@example.com')).to be_valid
-      end
-
-      it 'does not interpret the dot as any character' do
-        expect(DomainModerateUser.new(:email => 'user@example-com')).not_to be_valid
-      end
-    end
-
-    context 'when in strict mode' do
-      it 'does not interpret the dot as any character' do
-        expect(DomainStrictUser.new(:email => 'user@example-com')).not_to be_valid
+        expect(DomainStrictUser.new(:email => 'user@not-matching.io')).not_to be_valid
       end
 
       it 'is valid with matching domain' do
         expect(DomainStrictUser.new(:email => 'user@example.com')).to be_valid
       end
 
+      it 'does not interpret the dot as any character' do
+        expect(DomainStrictUser.new(:email => 'user@example-com')).not_to be_valid
+      end
+    end
+
+    context 'when in `:rfc` mode' do
+      it 'does not interpret the dot as any character' do
+        expect(DomainRfcUser.new(:email => 'user@example-com')).not_to be_valid
+      end
+
+      it 'is valid with matching domain' do
+        expect(DomainRfcUser.new(:email => 'user@example.com')).to be_valid
+      end
+
       it 'is not valid with mismatched domain' do
-        expect(DomainStrictUser.new(:email => 'user@not-matching.io')).not_to be_valid
+        expect(DomainRfcUser.new(:email => 'user@not-matching.io')).not_to be_valid
       end
     end
   end
 
   describe 'default_options' do
-    let(:email) { 'includes-whitespace-in-otherwise-valid-email@local' }
+    let(:valid_email) { 'valid-email@localhost.localdomain' }
+    let(:invalid_email) { 'invalid email@localhost.localdomain' }
 
-    it 'validates using `:loose` mode' do
-      expect(DefaultUser.new(:email => email)).to be_valid
+    it 'validates valid using `:loose` mode' do
+      expect(DefaultUser.new(:email => valid_email)).to be_valid
     end
 
-    context 'when `email_validator/moderate` has been required' do
-      before { require 'email_validator/moderate' }
-
-      it 'validates using `:moderate` mode' do
-        expect(DefaultUser.new(:email => email)).not_to be_valid
-      end
+    it 'invalidates invalid using `:loose` mode' do
+      expect(DefaultUser.new(:email => invalid_email)).to be_invalid
     end
 
     context 'when `email_validator/strict` has been required' do
       before { require 'email_validator/strict' }
 
-      it 'validate using `:strict` mode' do
-        expect(DefaultUser.new(:email => email)).to be_valid
+      it 'validates valid using `:strict` mode' do
+        expect(DefaultUser.new(:email => valid_email)).to be_valid
+      end
+
+      it 'invalidates invalid using `:strict` mode' do
+        expect(DefaultUser.new(:email => invalid_email)).to be_invalid
+      end
+    end
+
+    context 'when `email_validator/rfc` has been required' do
+      before { require 'email_validator/rfc' }
+
+      it 'validates valid using `:rfc` mode' do
+        expect(DefaultUser.new(:email => valid_email)).to be_valid
+      end
+
+      it 'invalidates invalid using `:rfc` mode' do
+        expect(DefaultUser.new(:email => invalid_email)).to be_invalid
       end
     end
   end

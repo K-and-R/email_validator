@@ -88,8 +88,8 @@ class EmailValidator < ActiveModel::EachValidator
     private
 
     def parse_options(options)
-      # `:moderate` mode enables `:require_fqdn`, unless it is already explicitly disabled
-      options[:require_fqdn] = true if options[:require_fqdn].nil? && options[:mode] == :moderate
+      # `:strict` mode enables `:require_fqdn`, unless it is already explicitly disabled
+      options[:require_fqdn] = true if options[:require_fqdn].nil? && options[:mode] == :strict
       default_options.merge(options)
     end
   end
