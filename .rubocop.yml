@@ -9,6 +9,7 @@
 #
 # See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
 require:
+  - rubocop-rake
   - rubocop-rspec
 
 AllCops:
@@ -23,7 +24,7 @@ Bundler/GemComment:
 Bundler/OrderedGems:
   TreatCommentsAsGroupSeparators: true
 
-Capybara/FeatureMethods:
+RSpec/Capybara/FeatureMethods:
   Enabled: true
   EnabledMethods:
     - feature
@@ -147,6 +148,9 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
     - '**/*.gemspec'
+
+Metrics/ClassLength:
+  Max: 150
 
 Metrics/MethodLength:
   Max: 15

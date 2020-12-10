@@ -50,6 +50,8 @@ group :development do
   gem 'rubocop', '>= 1.0'
   # Rubocop performance evaluation
   gem 'rubocop-performance', '>= 1.0'
+  # Rubocop Rake evaluation
+  gem 'rubocop-rake'
   # Rubocop RSpec evaluation
   gem 'rubocop-rspec', '>= 2.0'
 
