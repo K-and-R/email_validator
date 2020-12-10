@@ -121,8 +121,12 @@ class EmailValidator < ActiveModel::EachValidator
 
     def domain_part_pattern(options)
       return options[:domain].sub(/\./, '\.') if options[:domain].present?
-      return "(?:#{host_label_pattern}\\.)*#{domain_label_pattern}\\.#{domain_label_pattern}" if options[:require_fqdn]
-      "(?:#{address_literal}|(?:#{host_label_pattern}\\.)*#{domain_label_pattern})"
+      return fqdn_pattern if options[:require_fqdn]
+      "(?=.{1,255}$)(?:#{address_literal}|(?:#{host_label_pattern}\\.)*#{domain_label_pattern})"
+    end
+
+    def fqdn_pattern
+      "(?=.{1,255}$)(?:#{host_label_pattern}\\.)*#{domain_label_pattern}\\.#{domain_label_pattern}"
     end
 
     private
