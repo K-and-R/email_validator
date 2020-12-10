@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * [karlwilbur] - Modify regexp to:
     - allow numeric-only hosts [#68]
     - allow mailbox-only addresses  in `:rfc` mode
+    - enforce the 255-char domain limit (not in `:loose` mode unless using `:domain`)
 
 ## 2.2.0 (2020-12-09)
 

@@ -477,6 +477,7 @@ RSpec.describe EmailValidator do
         'domain-beginning-with-dash@-example.com',
         'domain-ending-with-dash@example-.com',
         'the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev',
+        "domain-too-long@t#{".#{'o' * 63}" * 5}.long",
         "user@example.com<script>alert('hello')</script>"
       ]).flatten.each do |email|
         context 'when using defaults' do
