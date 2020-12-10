@@ -7,7 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 2.2.1 (2020-12-10)
 
-* [karlwilbur] - Modify regexp to allow numeric-only hosts [#68]
+* [karlwilbur] - Modify regexp to:
+    - allow numeric-only hosts [#68]
+    - allow mailbox-only addresses  in `:rfc` mode
 
 ## 2.2.0 (2020-12-09)
 
