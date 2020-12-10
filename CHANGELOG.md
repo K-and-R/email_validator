@@ -5,6 +5,13 @@ This file is used to list changes made in `email_validator`.
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.1 (2020-12-10)
+
+* [karlwilbur] - Modify regexp to:
+    - allow numeric-only hosts [#68]
+    - allow mailbox-only addresses  in `:rfc` mode
+    - enforce the 255-char domain limit (not in `:loose` mode unless using `:domain`)
+
 ## 2.2.0 (2020-12-09)
 
 * [karlwilbur] - Rename `:strict` -> `:rfc`; `:moderate` -> `:strict`

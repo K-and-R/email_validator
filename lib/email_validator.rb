@@ -30,14 +30,30 @@ class EmailValidator < ActiveModel::EachValidator
     #  https://tools.ietf.org/html/rfc5321 : 4.1.2.  Command Argument Syntax
     def regexp(options = {})
       options = parse_options(options)
-      if options[:mode] == :loose
-        return /\A[^\s]+@[^\s]+\z/ if options[:domain].nil?
-        return /\A[^\s]+@#{domain_pattern(options)}\z/
+      case options[:mode]
+      when :loose
+        loose_regexp(options)
+      when :rfc
+        rfc_regexp(options)
+      else
+        strict_regexp(options)
       end
-      /\A(?>#{local_part_pattern})@#{domain_pattern(options)}\z/i
     end
 
     protected
+
+    def loose_regexp(options = {})
+      return /\A[^\s]+@[^\s]+\z/ if options[:domain].nil?
+      /\A[^\s]+@#{domain_part_pattern(options)}\z/
+    end
+
+    def strict_regexp(options = {})
+      /\A(?>#{local_part_pattern})@#{domain_part_pattern(options)}\z/i
+    end
+
+    def rfc_regexp(options = {})
+      /\A(?>#{local_part_pattern})(?:@#{domain_part_pattern(options)})?\z/i
+    end
 
     def alpha
       '[[:alpha:]]'
@@ -64,8 +80,32 @@ class EmailValidator < ActiveModel::EachValidator
       "\\[(?:#{ipv4}|#{ipv6})\\]"
     end
 
-    def label_pattern
-      "#{alpha}(?:#{alnumhy}{,62}#{alnum})?"
+    def host_label_pattern
+      "#{alnum}(?:#{alnumhy}{,61}#{alnum})?"
+    end
+
+    # splitting this up into separate regex pattern for performance; let's not
+    # try the "contains" pattern unless we have to
+    def domain_label_pattern
+      '(?=[^.]{1,63}(?:\.|$))' \
+      '(?:' \
+        "#{alpha}" \
+        "|#{domain_label_starts_with_a_letter_pattern}" \
+        "|#{domain_label_ends_with_a_letter_pattern}" \
+        "|#{domain_label_contains_a_letter_pattern}" \
+      ')'
+    end
+
+    def domain_label_starts_with_a_letter_pattern
+      "#{alpha}#{alnumhy}{,61}#{alnum}"
+    end
+
+    def domain_label_ends_with_a_letter_pattern
+      "#{alnum}#{alnumhy}{,61}#{alpha}"
+    end
+
+    def domain_label_contains_a_letter_pattern
+      "(?:[[:digit:]])(?:[[:digit:]]|-)*#{alpha}#{alnumhy}*#{alnum}"
     end
 
     def atom_char
@@ -79,10 +119,14 @@ class EmailValidator < ActiveModel::EachValidator
       "#{atom_char}(?:\\.?#{atom_char}){,63}"
     end
 
-    def domain_pattern(options)
+    def domain_part_pattern(options)
       return options[:domain].sub(/\./, '\.') if options[:domain].present?
-      return "(?:#{label_pattern}\\.)+#{label_pattern}" if options[:require_fqdn]
-      "(?:#{address_literal}|(?:#{label_pattern}\\.)*#{label_pattern})"
+      return fqdn_pattern if options[:require_fqdn]
+      "(?=.{1,255}$)(?:#{address_literal}|(?:#{host_label_pattern}\\.)*#{domain_label_pattern})"
+    end
+
+    def fqdn_pattern
+      "(?=.{1,255}$)(?:#{host_label_pattern}\\.)*#{domain_label_pattern}\\.#{domain_label_pattern}"
     end
 
     private

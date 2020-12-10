@@ -140,7 +140,13 @@ RSpec.describe EmailValidator do
         'someuser@somehost.somedomain',
         'mixed-1234-in-{+^}-local@sld.dev',
         'partially."quoted"@sld.com',
-        'areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca'
+        'areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca',
+        'john.doe@2020.example.com',
+        'john.doe@2a.com',
+        'john.doe@a2.com',
+        'john.doe@2020.a-z.com',
+        'john.doe@2020.a2z.com',
+        'john.doe@2020.12345a6789.com'
       ]).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should be valid" do
@@ -260,6 +266,132 @@ RSpec.describe EmailValidator do
       end
     end
 
+    context 'when given the numeric domain' do
+      [
+        'only-numbers-in-domain-label@sub.123.custom'
+      ].each do |email|
+        context 'when using defaults' do
+          it "'#{email}' should be valid" do
+            expect(DefaultUser.new(:email => email)).to be_valid
+          end
+
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email)
+          end
+
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email)
+          end
+
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp)).to be(true)
+          end
+        end
+
+        context 'when in `:strict` mode' do
+          it "'#{email}' should not be valid" do
+            expect(StrictUser.new(:email => email)).not_to be_valid
+          end
+
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :strict)
+          end
+
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :strict)
+          end
+
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should be valid" do
+            expect(RfcUser.new(:email => email)).to be_valid
+          end
+
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(true)
+          end
+        end
+      end
+    end
+
+    context 'when given the valid mailbox-only email' do
+      valid_includable.map { |k, v| [
+        "user-#{v}-#{k}-name"
+      ]}.concat(valid_beginable.map { |k, v| [
+        "#{v}-start-with-#{k}-user"
+      ]}).concat(valid_endable.map { |k, v| [
+        "end-with-#{k}-#{v}"
+      ]}).concat([
+        'user'
+      ]).flatten.each do |email|
+        context 'when using defaults' do
+          it "'#{email}' should not be valid" do
+            expect(DefaultUser.new(:email => email)).not_to be_valid
+          end
+
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email)
+          end
+
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email)
+          end
+
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp)).to be(false)
+          end
+        end
+
+        context 'when in `:strict` mode' do
+          it "'#{email}' should not be valid" do
+            expect(StrictUser.new(:email => email)).not_to be_valid
+          end
+
+          it "'#{email}' should not be valid using EmailValidator.valid?" do
+            expect(described_class).not_to be_valid(email, :mode => :strict)
+          end
+
+          it "'#{email}' should be invalid using EmailValidator.invalid?" do
+            expect(described_class).to be_invalid(email, :mode => :strict)
+          end
+
+          it "'#{email}' should not match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it "'#{email}' should be valid" do
+            expect(RfcUser.new(:email => email)).to be_valid
+          end
+
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should not be invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :rfc)
+          end
+
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :rfc))).to be(true)
+          end
+        end
+      end
+    end
+
     context 'when given the valid IP address email' do
       [
         'bracketed-IP@[127.0.0.1]',
@@ -334,8 +466,6 @@ RSpec.describe EmailValidator do
         'test@example.com@example.com',
         'missing-sld@.com',
         'missing-tld@sld.',
-        'only-numbers-in-domain-label@sub.123.com',
-        'only-numbers-in-domain-label@123.example.com',
         'unbracketed-IPv6@abcd:ef01:1234:5678:9abc:def0:1234:5678',
         'unbracketed-and-labled-IPv6@IPv6:abcd:ef01:1234:5678:9abc:def0:1234:5678',
         'bracketed-and-unlabeled-IPv6@[abcd:ef01:1234:5678:9abc:def0:1234:5678]',
@@ -347,6 +477,7 @@ RSpec.describe EmailValidator do
         'domain-beginning-with-dash@-example.com',
         'domain-ending-with-dash@example-.com',
         'the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev',
+        "domain-too-long@t#{".#{'o' * 63}" * 5}.long",
         "user@example.com<script>alert('hello')</script>"
       ]).flatten.each do |email|
         context 'when using defaults' do
@@ -504,8 +635,7 @@ RSpec.describe EmailValidator do
         '@bar.com',
         'test@',
         '@missing-local.dev',
-        ' ',
-        'missing-at-sign.dev'
+        ' '
       ].each do |email|
         context 'when using defaults' do
           it "'#{email}' should not be valid" do
