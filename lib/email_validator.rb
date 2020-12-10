@@ -30,14 +30,30 @@ class EmailValidator < ActiveModel::EachValidator
     #  https://tools.ietf.org/html/rfc5321 : 4.1.2.  Command Argument Syntax
     def regexp(options = {})
       options = parse_options(options)
-      if options[:mode] == :loose
-        return /\A[^\s]+@[^\s]+\z/ if options[:domain].nil?
-        return /\A[^\s]+@#{domain_part_pattern(options)}\z/
+      case options[:mode]
+      when :loose
+        loose_regexp(options)
+      when :rfc
+        rfc_regexp(options)
+      else
+        strict_regexp(options)
       end
-      /\A(?>#{local_part_pattern})@#{domain_part_pattern(options)}\z/i
     end
 
     protected
+
+    def loose_regexp(options = {})
+      return /\A[^\s]+@[^\s]+\z/ if options[:domain].nil?
+      /\A[^\s]+@#{domain_part_pattern(options)}\z/
+    end
+
+    def strict_regexp(options = {})
+      /\A(?>#{local_part_pattern})@#{domain_part_pattern(options)}\z/i
+    end
+
+    def rfc_regexp(options = {})
+      /\A(?>#{local_part_pattern})(?:@#{domain_part_pattern(options)})?\z/i
+    end
 
     def alpha
       '[[:alpha:]]'
@@ -71,12 +87,13 @@ class EmailValidator < ActiveModel::EachValidator
     # splitting this up into separate regex pattern for performance; let's not
     # try the "contains" pattern unless we have to
     def domain_label_pattern
-      "(?=[^.]{1,63}(?:\\.|$))(?:" \
+      '(?=[^.]{1,63}(?:\.|$))' \
+      '(?:' \
         "#{alpha}" \
         "|#{domain_label_starts_with_a_letter_pattern}" \
         "|#{domain_label_ends_with_a_letter_pattern}" \
         "|#{domain_label_contains_a_letter_pattern}" \
-      ")"
+      ')'
     end
 
     def domain_label_starts_with_a_letter_pattern
