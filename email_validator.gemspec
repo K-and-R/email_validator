@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'email_validator'
-  s.version = '2.2.1'
+  s.version = '2.2.2'
   s.authors = ['Brian Alexander', 'Karl Wilbur']
   s.summary = 'An email validator for Rails 3+.'
   s.description = 'An email validator for Rails 3+. See homepage for details: http://github.com/K-and-R/email_validator'
@@ -12,9 +12,7 @@ Gem::Specification.new do |s|
     README.md
     CHANGELOG.md
   ]
-  s.files = Dir[
-    'lib/*.rb'
-  ]
+  s.files = `git ls-files -- lib/*`.split("\n")
   s.require_paths = %w[lib]
 
   s.test_files = `git ls-files -- spec/*`.split("\n")
