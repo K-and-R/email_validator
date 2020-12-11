@@ -12,9 +12,7 @@ Gem::Specification.new do |s|
     README.md
     CHANGELOG.md
   ]
-  s.files = Dir[
-    'lib/*.rb'
-  ]
+  s.files = `git ls-files -- lib/*`.split("\n")
   s.require_paths = %w[lib]
 
   s.test_files = `git ls-files -- spec/*`.split("\n")
