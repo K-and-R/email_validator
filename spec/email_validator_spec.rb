@@ -146,7 +146,8 @@ RSpec.describe EmailValidator do
         'john.doe@a2.com',
         'john.doe@2020.a-z.com',
         'john.doe@2020.a2z.com',
-        'john.doe@2020.12345a6789.com'
+        'john.doe@2020.12345a6789.com',
+        'jonh.doe@163.com'
       ]).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should be valid" do
