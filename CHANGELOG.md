@@ -5,6 +5,11 @@ This file is used to list changes made in `email_validator`.
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.3 (2021-04-01)
+
+* [delphaber] - Add checks for numeric-only domains in tests  (should be considered valid)
+* [karlwilbur] - Add tests to ensure that `regexp` returns expected value
+
 ## 2.2.2 (2020-12-10)
 
 * [karlwilbur] - Fix includes for `:rfc` and `:strict` modes from `Gemfile`

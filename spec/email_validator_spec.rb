@@ -1013,4 +1013,30 @@ RSpec.describe EmailValidator do
       end
     end
   end
+
+  context 'with regexp' do
+    it 'returns a regexp when asked' do
+      expect(described_class.regexp).to be_a(Regexp)
+    end
+
+    it 'returns a strict regexp when asked' do
+      expect(described_class.regexp(:mode => :strict)).to be_a(Regexp)
+    end
+
+    it 'returns a RFC regexp when asked' do
+      expect(described_class.regexp(:mode => :rfc)).to be_a(Regexp)
+    end
+
+    it 'has different regexp for strict and loose' do
+      expect(described_class.regexp(:mode => :strict)).not_to eq(described_class.regexp(:mode => :loose))
+    end
+
+    it 'has different regexp for RFC and loose' do
+      expect(described_class.regexp(:mode => :rfc)).not_to eq(described_class.regexp(:mode => :loose))
+    end
+
+    it 'has different regexp for RFC and strict' do
+      expect(described_class.regexp(:mode => :rfc)).not_to eq(described_class.regexp(:mode => :strict))
+    end
+  end
 end
