@@ -477,6 +477,7 @@ RSpec.describe EmailValidator do
         'host-beginning-with-dot@.example.com',
         'domain-beginning-with-dash@-example.com',
         'domain-ending-with-dash@example-.com',
+        'domain-contains-double-dash@foo--example.com',
         'the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev',
         "domain-too-long@t#{".#{'o' * 63}" * 5}.long",
         "user@example.com<script>alert('hello')</script>"

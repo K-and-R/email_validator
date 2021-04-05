@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * [karlwilbur] - Fix specs for numeric-only domains labels (should be considered valid)
 * [karlwilbur] - Add checks for numeric-only TLDs in tests (should be considered invalid)
 * [karlwilbur] - Add tests to ensure that `regexp` returns expected value
+* [karlwilbur] - Add checks for double dash in domain (should be considered invalid)
 
 ## 2.2.2 (2020-12-10)
 
