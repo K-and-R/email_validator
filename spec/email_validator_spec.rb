@@ -290,20 +290,20 @@ RSpec.describe EmailValidator do
         end
 
         context 'when in `:strict` mode' do
-          it "'#{email}' should not be valid" do
-            expect(StrictUser.new(:email => email)).not_to be_valid
+          it "'#{email}' should be valid" do
+            expect(StrictUser.new(:email => email)).to be_valid
           end
 
-          it "'#{email}' should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :strict)
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :strict)
           end
 
-          it "'#{email}' should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :strict)
+          it "'#{email}' should be not invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :strict)
           end
 
-          it "'#{email}' should not match the regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(true)
           end
         end
 
