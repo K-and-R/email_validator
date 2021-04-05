@@ -7,7 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 2.2.3 (2021-04-01)
 
-* [delphaber] - Add checks for numeric-only domains in tests  (should be considered valid)
+* [delphaber] - Add checks for numeric-only domains in tests (should be considered valid)
+* [karlwilbur] - Add checks for numeric-only TLDs in tests (should be considered invalid)
 * [karlwilbur] - Add tests to ensure that `regexp` returns expected value
 
 ## 2.2.2 (2020-12-10)

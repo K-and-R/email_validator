@@ -54,9 +54,9 @@ by setting `require_fqdn: true` or by enabling `:strict` checking:
 validates :my_email_attribute, email: {mode: :strict, require_fqdn: true}
 ```
 
-You can also limit to a single domain (e.g: this might help if, for example, you
-have separate `User` and `AdminUser` models and want to ensure that `AdminUser`
-emails are on a specific domain):
+You can also limit to a single domain (e.g: you have separate `User` and
+`AdminUser` models and want to ensure that `AdminUser` emails are on a specific
+domain):
 
 ```ruby
 validates :my_email_attribute, email: {domain: 'example.com'}
