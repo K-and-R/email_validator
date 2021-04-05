@@ -166,6 +166,10 @@ EmailValidator.valid?('narf@somehost') # boolean false
 EmailValidator.invalid?('narf@somehost', require_fqdn: false) # boolean true
 ```
 
+_NB: Enabling strict mode (`mode: :strict`) enables `require_fqdn`
+(`require_fqdn: true`), overridding any `require_fqdn: false` while
+`mode: :strict` is set._
+
 ### Requiring a specific domain
 
 ```ruby

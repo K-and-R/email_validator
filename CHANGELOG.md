@@ -5,14 +5,15 @@ This file is used to list changes made in `email_validator`.
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.2.3 (2021-04-01)
+## 2.2.3 (2021-04-05)
 
-* [delphaber] - Add checks for numeric-only domains in tests (should be considered valid)
-* [karlwilbur] - Fix specs for numeric-only domains labels (should be considered valid)
-* [karlwilbur] - Add checks for numeric-only TLDs in tests (should be considered invalid)
-* [karlwilbur] - Add tests to ensure that `regexp` returns expected value
-* [karlwilbur] - Add checks for double dash in domain (should be considered invalid)
-* [karlwilbur] - Add `EmailValidator::Error` class, raise `EmailValidator::Error` when invalid `mode`
+* [karlwilbur] - Fix regexp for numeric domains (fixes [#72](https://github.com/K-and-R/email_validator/issues/72))
+    - [delphaber] - Add checks for numeric-only domains in tests (should be considered valid)
+    - [karlwilbur] - Fix specs for numeric-only domains labels (should be considered valid)
+    - [karlwilbur] - Add checks for numeric-only TLDs in tests (should be considered invalid)
+    - [karlwilbur] - Add tests to ensure that `regexp` returns expected value
+    - [karlwilbur] - Add checks for double dash in domain (should be considered invalid)
+    - [karlwilbur] - Add `EmailValidator::Error` class, raise `EmailValidator::Error` when invalid `mode`
 
 ## 2.2.2 (2020-12-10)
 

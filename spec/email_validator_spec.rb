@@ -784,23 +784,24 @@ RSpec.describe EmailValidator do
           end
         end
 
+        # Strict mode enables `require_fqdn` anyway
         context 'when in `:strict` mode' do
           let(:opts) { { :require_fqdn => false, :mode => :strict } }
 
-          it 'is valid' do
-            expect(NonFqdnStrictUser.new(:email => email)).to be_valid
+          it 'is not valid' do
+            expect(NonFqdnStrictUser.new(:email => email)).not_to be_valid
           end
 
-          it 'is valid using EmailValidator.valid?' do
-            expect(described_class).to be_valid(email, opts)
+          it 'is not valid using EmailValidator.valid?' do
+            expect(described_class).not_to be_valid(email, opts)
           end
 
-          it 'is not invalid using EmailValidator.invalid?' do
-            expect(described_class).not_to be_invalid(email, opts)
+          it 'is invalid using EmailValidator.invalid?' do
+            expect(described_class).to be_invalid(email, opts)
           end
 
           it 'matches the regexp' do
-            expect(!!(email =~ described_class.regexp(opts))).to be(true)
+            expect(!!(email =~ described_class.regexp(opts))).to be(false)
           end
         end
 

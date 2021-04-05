@@ -93,31 +93,38 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     def host_label_pattern
+      "#{label_is_correct_length}" \
+      "#{label_contains_no_more_than_one_consecutive_hyphen}" \
       "#{alnum}(?:#{alnumhy}{,61}#{alnum})?"
     end
 
     # splitting this up into separate regex pattern for performance; let's not
     # try the "contains" pattern unless we have to
     def domain_label_pattern
-      '(?=[^.]{1,63}(?:\.|$))' \
-      '(?:' \
-        "#{alpha}" \
-        "|#{domain_label_starts_with_a_letter_pattern}" \
-        "|#{domain_label_ends_with_a_letter_pattern}" \
-        "|#{domain_label_contains_a_letter_pattern}" \
-      ')'
+      "#{host_label_pattern}\\.#{tld_label_pattern}"
     end
 
-    def domain_label_starts_with_a_letter_pattern
-      "#{alpha}#{alnumhy}{,61}#{alnum}"
+    # While, techincally, TLDs can be numeric-only, this is not allowed by ICANN
+    # Ref: ICANN Application Guidebook for new TLDs (June 2012)
+    #      says the following starting at page 64:
+    #
+    #      > The ASCII label must consist entirely of letters (alphabetic characters a-z)
+    #
+    #      -- https://newgtlds.icann.org/en/applicants/agb/guidebook-full-04jun12-en.pdf
+    def tld_label_pattern
+      "#{alpha}{1,64}"
     end
 
-    def domain_label_ends_with_a_letter_pattern
-      "#{alnum}#{alnumhy}{,61}#{alpha}"
+    def label_is_correct_length
+      '(?=[^.]{1,63}(?:\.|$))'
     end
 
-    def domain_label_contains_a_letter_pattern
-      "(?:[[:digit:]])(?:[[:digit:]]|-)*#{alpha}#{alnumhy}*#{alnum}"
+    def domain_part_is_correct_length
+      '(?=.{1,255}$)'
+    end
+
+    def label_contains_no_more_than_one_consecutive_hyphen
+      '(?!.*?--.*$)'
     end
 
     def atom_char
@@ -134,11 +141,11 @@ class EmailValidator < ActiveModel::EachValidator
     def domain_part_pattern(options)
       return options[:domain].sub(/\./, '\.') if options[:domain].present?
       return fqdn_pattern if options[:require_fqdn]
-      "(?=.{1,255}$)(?:#{address_literal}|(?:#{host_label_pattern}\\.)*#{domain_label_pattern})"
+      "#{domain_part_is_correct_length}(?:#{address_literal}|(?:#{host_label_pattern}\\.)*#{tld_label_pattern})"
     end
 
     def fqdn_pattern
-      "(?=.{1,255}$)(?:#{host_label_pattern}\\.)*#{domain_label_pattern}\\.#{domain_label_pattern}"
+      "(?=.{1,255}$)(?:#{host_label_pattern}\\.)*#{domain_label_pattern}"
     end
 
     private
