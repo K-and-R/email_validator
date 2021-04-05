@@ -1,4 +1,6 @@
 # Based on work from http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/
+
+# EmailValidator class
 class EmailValidator < ActiveModel::EachValidator
   # rubocop:disable Style/ClassVars
   @@default_options = {
@@ -8,6 +10,13 @@ class EmailValidator < ActiveModel::EachValidator
     :mode => :loose
   }
   # rubocop:enable Style/ClassVars
+
+  # EmailValidator::Error class
+  class Error < StandardError
+    def initialize(msg = 'EmailValidator error')
+      super
+    end
+  end
 
   class << self
     def default_options
@@ -35,8 +44,11 @@ class EmailValidator < ActiveModel::EachValidator
         loose_regexp(options)
       when :rfc
         rfc_regexp(options)
-      else
+      when :strict
+        options[:require_fqdn] = true
         strict_regexp(options)
+      else
+        fail EmailValidator::Error, "Validation mode '#{options[:mode]}' is not supported by EmailValidator"
       end
     end
 

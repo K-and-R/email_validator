@@ -1041,4 +1041,10 @@ RSpec.describe EmailValidator do
       expect(described_class.regexp(:mode => :rfc)).not_to eq(described_class.regexp(:mode => :strict))
     end
   end
+
+  context 'with invalid `:mode`' do
+    it 'raises an error' do
+      expect { described_class.regexp(:mode => :invalid) }.to raise_error(EmailValidator::Error)
+    end
+  end
 end

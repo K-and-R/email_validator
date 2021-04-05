@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * [karlwilbur] - Add checks for numeric-only TLDs in tests (should be considered invalid)
 * [karlwilbur] - Add tests to ensure that `regexp` returns expected value
 * [karlwilbur] - Add checks for double dash in domain (should be considered invalid)
+* [karlwilbur] - Add `EmailValidator::Error` class, raise `EmailValidator::Error` when invalid `mode`
 
 ## 2.2.2 (2020-12-10)
 
