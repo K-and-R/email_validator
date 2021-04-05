@@ -146,7 +146,8 @@ RSpec.describe EmailValidator do
         'john.doe@a2.com',
         'john.doe@2020.a-z.com',
         'john.doe@2020.a2z.com',
-        'john.doe@2020.12345a6789.com'
+        'john.doe@2020.12345a6789.com',
+        'jonh.doe@163.com'
       ]).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should be valid" do
@@ -289,20 +290,20 @@ RSpec.describe EmailValidator do
         end
 
         context 'when in `:strict` mode' do
-          it "'#{email}' should not be valid" do
-            expect(StrictUser.new(:email => email)).not_to be_valid
+          it "'#{email}' should be valid" do
+            expect(StrictUser.new(:email => email)).to be_valid
           end
 
-          it "'#{email}' should not be valid using EmailValidator.valid?" do
-            expect(described_class).not_to be_valid(email, :mode => :strict)
+          it "'#{email}' should be valid using EmailValidator.valid?" do
+            expect(described_class).to be_valid(email, :mode => :strict)
           end
 
-          it "'#{email}' should be invalid using EmailValidator.invalid?" do
-            expect(described_class).to be_invalid(email, :mode => :strict)
+          it "'#{email}' should be not invalid using EmailValidator.invalid?" do
+            expect(described_class).not_to be_invalid(email, :mode => :strict)
           end
 
-          it "'#{email}' should not match the regexp" do
-            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(false)
+          it "'#{email}' should match the regexp" do
+            expect(!!(email.strip =~ described_class.regexp(:mode => :strict))).to be(true)
           end
         end
 
@@ -476,6 +477,7 @@ RSpec.describe EmailValidator do
         'host-beginning-with-dot@.example.com',
         'domain-beginning-with-dash@-example.com',
         'domain-ending-with-dash@example-.com',
+        'domain-contains-double-dash@foo--example.com',
         'the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev',
         "domain-too-long@t#{".#{'o' * 63}" * 5}.long",
         "user@example.com<script>alert('hello')</script>"
@@ -703,7 +705,8 @@ RSpec.describe EmailValidator do
       ]}).concat([
         'user..-with-double-dots@example.com',
         '.user-beginning-with-dot@example.com',
-        'user-ending-with-dot.@example.com'
+        'user-ending-with-dot.@example.com',
+        'fully-numeric-tld@example.123'
       ]).flatten.each do |email|
         context 'when using defaults' do
           it "#{email.strip} in a model should be valid" do
@@ -781,23 +784,24 @@ RSpec.describe EmailValidator do
           end
         end
 
+        # Strict mode enables `require_fqdn` anyway
         context 'when in `:strict` mode' do
           let(:opts) { { :require_fqdn => false, :mode => :strict } }
 
-          it 'is valid' do
-            expect(NonFqdnStrictUser.new(:email => email)).to be_valid
+          it 'is not valid' do
+            expect(NonFqdnStrictUser.new(:email => email)).not_to be_valid
           end
 
-          it 'is valid using EmailValidator.valid?' do
-            expect(described_class).to be_valid(email, opts)
+          it 'is not valid using EmailValidator.valid?' do
+            expect(described_class).not_to be_valid(email, opts)
           end
 
-          it 'is not invalid using EmailValidator.invalid?' do
-            expect(described_class).not_to be_invalid(email, opts)
+          it 'is invalid using EmailValidator.invalid?' do
+            expect(described_class).to be_invalid(email, opts)
           end
 
           it 'matches the regexp' do
-            expect(!!(email =~ described_class.regexp(opts))).to be(true)
+            expect(!!(email =~ described_class.regexp(opts))).to be(false)
           end
         end
 
@@ -1010,6 +1014,38 @@ RSpec.describe EmailValidator do
       it 'invalidates invalid using `:rfc` mode' do
         expect(DefaultUser.new(:email => invalid_email)).to be_invalid
       end
+    end
+  end
+
+  context 'with regexp' do
+    it 'returns a regexp when asked' do
+      expect(described_class.regexp).to be_a(Regexp)
+    end
+
+    it 'returns a strict regexp when asked' do
+      expect(described_class.regexp(:mode => :strict)).to be_a(Regexp)
+    end
+
+    it 'returns a RFC regexp when asked' do
+      expect(described_class.regexp(:mode => :rfc)).to be_a(Regexp)
+    end
+
+    it 'has different regexp for strict and loose' do
+      expect(described_class.regexp(:mode => :strict)).not_to eq(described_class.regexp(:mode => :loose))
+    end
+
+    it 'has different regexp for RFC and loose' do
+      expect(described_class.regexp(:mode => :rfc)).not_to eq(described_class.regexp(:mode => :loose))
+    end
+
+    it 'has different regexp for RFC and strict' do
+      expect(described_class.regexp(:mode => :rfc)).not_to eq(described_class.regexp(:mode => :strict))
+    end
+  end
+
+  context 'with invalid `:mode`' do
+    it 'raises an error' do
+      expect { described_class.regexp(:mode => :invalid) }.to raise_error(EmailValidator::Error)
     end
   end
 end
