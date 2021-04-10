@@ -68,7 +68,7 @@ Default configuration can be overridden by setting options in `config/initialize
 
 ```ruby
 if defined?(EmailValidator)
-  # To completly override the defaults
+  # To completely override the defaults
   EmailValidator.default_options = {
     allow_nil: false,
     domain: nil,
