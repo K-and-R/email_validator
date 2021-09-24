@@ -14,7 +14,7 @@ Formerly found at: <https://github.com/balexand/email_validator>
 
 The default validation provided by this gem (the `:loose` configuration option)
 is extremely loose. It just checks that there's an `@` with something before and
-after it without any whitespace. See [this article by David Gilbertson](https://hackernoon.com/the-100-correct-way-to-validate-email-addresses-7c4818f24643)
+after it without any whitespace. See [this article by David Gilbertson](https://medium.com/hackernoon/the-100-correct-way-to-validate-email-addresses-7c4818f24643)
 for an explanation of why.
 
 We understand that many use cases require an increased level of validation. This
