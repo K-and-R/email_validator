@@ -147,7 +147,9 @@ RSpec.describe EmailValidator do
         'john.doe@2020.a-z.com',
         'john.doe@2020.a2z.com',
         'john.doe@2020.12345a6789.com',
-        'jonh.doe@163.com'
+        'jonh.doe@163.com',
+        'test@umläut.com', # non-ASCII
+        'test@xn--umlut-ira.com' # ASCII-compatibale encoding of non-ASCII
       ]).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should be valid" do
@@ -477,7 +479,6 @@ RSpec.describe EmailValidator do
         'host-beginning-with-dot@.example.com',
         'domain-beginning-with-dash@-example.com',
         'domain-ending-with-dash@example-.com',
-        'domain-contains-double-dash@foo--example.com',
         'the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev',
         "domain-too-long@t#{".#{'o' * 63}" * 5}.long",
         "user@example.com<script>alert('hello')</script>"
