@@ -27,6 +27,8 @@ class EmailValidator < ActiveModel::EachValidator
       options = parse_options(options)
       return true if value.nil? && options[:allow_nil] == true
       return false if value.nil?
+      # quickly fail if domain is required but doesn't match
+      return false unless options[:domain].nil? || value[/^.*@#{regexp_safe_domain(options)}$/]
       !!(value =~ regexp(options))
     end
 
@@ -134,7 +136,7 @@ class EmailValidator < ActiveModel::EachValidator
     end
 
     def domain_part_pattern(options)
-      return options[:domain].sub(/\./, '\.') if options[:domain].present?
+      return regexp_safe_domain(options) unless options[:domain].nil?
       return fqdn_pattern if options[:require_fqdn]
       "#{domain_part_is_correct_length}(?:#{address_literal}|(?:#{host_label_pattern}\\.)*#{tld_label_pattern})"
     end
@@ -149,6 +151,10 @@ class EmailValidator < ActiveModel::EachValidator
       # `:strict` mode enables `:require_fqdn`, unless it is already explicitly disabled
       options[:require_fqdn] = true if options[:require_fqdn].nil? && options[:mode] == :strict
       default_options.merge(options)
+    end
+
+    def regexp_safe_domain(options)
+      options[:domain].sub(/\./, '\.')
     end
   end
 

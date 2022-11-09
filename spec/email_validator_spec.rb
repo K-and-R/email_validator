@@ -52,6 +52,18 @@ class NonFqdnRfcUser < TestModel
   validates :email, :email => { :require_fqdn => false, :mode => :rfc }
 end
 
+class RequireFqdnWithEmptyDomainUser < TestModel
+  validates :email_address, :email => { :require_fqdn => true, :domain => '' }
+end
+
+class RequireEmptyDomainStrictUser < TestModel
+  validates :email_address, :email => { :require_fqdn => true, :domain => '', :mode => :strict }
+end
+
+class RequireEmptyDomainRfcUser < TestModel
+  validates :email_address, :email => { :require_fqdn => true, :domain => '', :mode => :rfc }
+end
+
 class DefaultUserWithMessage < TestModel
   validates :email_address, :email => { :message => 'is not looking very good!' }
 end
@@ -728,7 +740,7 @@ RSpec.describe EmailValidator do
         end
 
         context 'when in `:strict` mode' do
-          it "#{email.strip} in a model should be valid" do
+          it "#{email.strip} in a model should not be valid" do
             expect(StrictUser.new(:email => email)).not_to be_valid
           end
 
@@ -760,6 +772,68 @@ RSpec.describe EmailValidator do
 
           it "#{email.strip} should not match the regexp" do
             expect(!!(email =~ described_class.regexp(:mode => :rfc))).to be(false)
+          end
+        end
+      end
+    end
+
+    context 'when `require_fqdn` is explicitly enabled with a blank domain' do
+      let(:opts) { { :require_fqdn => true, :domain => '' } }
+
+      context 'when given a email containing any domain' do
+        let(:email) { 'someuser@somehost' }
+
+        context 'when using defaults' do
+          it 'is not valid in a model' do
+            expect(RequireFqdnWithEmptyDomainUser.new(:email => email)).not_to be_valid
+          end
+
+          it 'is not using EmailValidator.valid?' do
+            expect(described_class).not_to be_valid(email, opts)
+          end
+
+          it 'is invalid using EmailValidator.invalid?' do
+            expect(described_class).to be_invalid(email, opts)
+          end
+
+          it 'does not match the regexp' do
+            expect(!!(email =~ described_class.regexp(opts))).to be(false)
+          end
+        end
+
+        context 'when in `:strict` mode' do
+          it 'is not valid in a model' do
+            expect(RequireEmptyDomainStrictUser.new(:email => email)).not_to be_valid
+          end
+
+          it 'is not using EmailValidator.valid?' do
+            expect(described_class).not_to be_valid(email, opts.merge({ :mode => :strict }))
+          end
+
+          it 'is invalid using EmailValidator.invalid?' do
+            expect(described_class).to be_invalid(email, opts.merge({ :mode => :strict }))
+          end
+
+          it 'does not match the regexp' do
+            expect(!!(email =~ described_class.regexp(opts.merge({ :mode => :strict })))).to be(false)
+          end
+        end
+
+        context 'when in `:rfc` mode' do
+          it 'is not valid in a model' do
+            expect(RequireEmptyDomainRfcUser.new(:email => email)).not_to be_valid
+          end
+
+          it 'is not using EmailValidator.valid?' do
+            expect(described_class).not_to be_valid(email, opts.merge({ :mode => :rfc }))
+          end
+
+          it 'is invalid using EmailValidator.invalid?' do
+            expect(described_class).to be_invalid(email, opts.merge({ :mode => :rfc }))
+          end
+
+          it 'does not match the regexp' do
+            expect(!!(email =~ described_class.regexp(opts.merge({ :mode => :rfc })))).to be(false)
           end
         end
       end
