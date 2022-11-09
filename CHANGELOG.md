@@ -5,6 +5,31 @@ This file is used to list changes made in `email_validator`.
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.4 (2022-11-09)
+
+* [karlwilbur] - Remove Ruby 2.4 from tested versions; add Ruby 3.0 and 3.1 to tested versions
+* [karlwilbur] - Fix issue where `domain: ''` wasn't requiring empty domain
+* [karlwilbur] - Remove checks for double hyphens (fixes [#87](https://github.com/K-and-R/email_validator/issues/87))
+* [dependabot] - Security updates
+    - [#89](https://github.com/K-and-R/email_validator/pull/89)
+        + Bump `minimist` from `1.2.5` to `1.2.7`
+    - [#86](https://github.com/K-and-R/email_validator/pull/86)
+        + Bump `node-fetch` from `2.6.1` to `2.6.7`
+        + Add `whatwg-url` at `5.0.0`
+        + Add `tr46` at `0.0.3`
+        + Add `webidl-conversions` at `3.0.0`
+    - [#80](https://github.com/K-and-R/email_validator/pull/80)
+        + Bump `tar` from `6.0.5` to `6.1.11`
+        + Bump `minipass` from `3.1.3` to `3.1.5`
+    - [#79](https://github.com/K-and-R/email_validator/pull/79)
+        + Bump `path-parse` from `1.0.6` to `1.0.7`
+    - [#76](https://github.com/K-and-R/email_validator/pull/76)
+        + Bump `lodash` from `4.17.20` to `4.17.21`
+    - [#75](https://github.com/K-and-R/email_validator/pull/75)
+        + Bump `hosted-git-info` from `2.8.8` to `2.8.9`
+* [msands] - Fix URL in `README.md` [#81](https://github.com/K-and-R/email_validator/pull/81)
+* [kerolloz] - Fix typo in `README.md` [#73](https://github.com/K-and-R/email_validator/pull/73)
+
 ## 2.2.3 (2021-04-05)
 
 * [karlwilbur] - Fix regexp for numeric domains (fixes [#72](https://github.com/K-and-R/email_validator/issues/72))
@@ -12,8 +37,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - [karlwilbur] - Fix specs for numeric-only domains labels (should be considered valid)
     - [karlwilbur] - Add checks for numeric-only TLDs in tests (should be considered invalid)
     - [karlwilbur] - Add tests to ensure that `regexp` returns expected value
-    - [karlwilbur] - Add checks for double dash in domain (should be considered invalid)
-    - [karlwilbur] - Add `EmailValidator::Error` class, raise `EmailValidator::Error` when invalid `mode`
+* [karlwilbur] - Add checks for double dash in domain (should be considered invalid)
+* [karlwilbur] - Add `EmailValidator::Error` class, raise `EmailValidator::Error` when invalid `mode`
 
 ## 2.2.2 (2020-12-10)
 
