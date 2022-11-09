@@ -94,7 +94,6 @@ class EmailValidator < ActiveModel::EachValidator
 
     def host_label_pattern
       "#{label_is_correct_length}" \
-      "#{label_contains_no_more_than_one_consecutive_hyphen}" \
       "#{alnum}(?:#{alnumhy}{,61}#{alnum})?"
     end
 
@@ -121,10 +120,6 @@ class EmailValidator < ActiveModel::EachValidator
 
     def domain_part_is_correct_length
       '(?=.{1,255}$)'
-    end
-
-    def label_contains_no_more_than_one_consecutive_hyphen
-      '(?!.*?--.*$)'
     end
 
     def atom_char
