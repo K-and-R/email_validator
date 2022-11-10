@@ -1,5 +1,6 @@
 # EmailValidator
 
+[![Gem Version](https://badge.fury.io/rb/email_validator.svg)](https://badge.fury.io/rb/email_validator)
 [![Build Status](https://travis-ci.com/K-and-R/email_validator.svg?branch=master)](http://travis-ci.com/github/K-and-R/email_validator)
 [![Code Climate](https://codeclimate.com/github/K-and-R/email_validator/badges/gpa.svg)](https://codeclimate.com/github/K-and-R/email_validator)
 [![Test Coverage](https://codeclimate.com/github/K-and-R/email_validator/badges/coverage.svg)](https://codeclimate.com/github/K-and-R/email_validator/coverage)
