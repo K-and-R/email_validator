@@ -16,7 +16,7 @@ AllCops:
   Exclude:
     - 'bin/*'
   NewCops: enable
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.7
 
 Bundler/GemComment:
   Enabled: true

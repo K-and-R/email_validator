@@ -96,7 +96,7 @@ class EmailValidator < ActiveModel::EachValidator
 
     def host_label_pattern
       "#{label_is_correct_length}" \
-      "#{alnum}(?:#{alnumhy}{,61}#{alnum})?"
+        "#{alnum}(?:#{alnumhy}{,61}#{alnum})?"
     end
 
     # splitting this up into separate regex pattern for performance; let's not

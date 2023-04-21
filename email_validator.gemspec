@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.add_dependency('activemodel')
 
   s.add_development_dependency('rubysl', '~> 2.0') if RUBY_ENGINE == 'rbx'
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

@@ -126,7 +126,7 @@ RSpec.describe EmailValidator do
         "#{v}start-with-#{k}@valid-characters-in-local.dev"
       ]}).concat(valid_endable.map { |k, v| [
         "end-with-#{k}-#{v}@valid-characters-in-local.dev"
-      ]}).concat([
+      ]}).push(
         'a+b@plus-in-local.com',
         'a_b@underscore-in-local.com',
         'user@example.com',
@@ -162,7 +162,7 @@ RSpec.describe EmailValidator do
         'jonh.doe@163.com',
         'test@umläut.com', # non-ASCII
         'test@xn--umlut-ira.com' # ASCII-compatibale encoding of non-ASCII
-      ]).flatten.each do |email|
+      ).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
@@ -348,9 +348,9 @@ RSpec.describe EmailValidator do
         "#{v}-start-with-#{k}-user"
       ]}).concat(valid_endable.map { |k, v| [
         "end-with-#{k}-#{v}"
-      ]}).concat([
+      ]}).push(
         'user'
-      ]).flatten.each do |email|
+      ).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should not be valid" do
             expect(DefaultUser.new(:email => email)).not_to be_valid
@@ -477,7 +477,7 @@ RSpec.describe EmailValidator do
         "end-with-#{k}@invalid-characters-in-domain#{v}.dev"
       ]}).concat(domain_invalid_includable.map { |k, v| [
         "include-#{k}@invalid-characters-#{v}-in-domain.dev"
-      ]}).concat([
+      ]}).push(
         'test@example.com@example.com',
         'missing-sld@.com',
         'missing-tld@sld.',
@@ -494,7 +494,7 @@ RSpec.describe EmailValidator do
         'the-local-part-is-invalid-if-it-is-longer-than-sixty-four-characters@sld.dev',
         "domain-too-long@t#{".#{'o' * 63}" * 5}.long",
         "user@example.com<script>alert('hello')</script>"
-      ]).flatten.each do |email|
+      ).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
@@ -554,7 +554,7 @@ RSpec.describe EmailValidator do
     context 'when given the invalid email with whitespace in parts' do
       whitespace.map { |k, v| [
         "include-#{v}-#{k}@invalid-characters-in-local.dev"
-      ]}.concat([
+      ]}.push(
         'foo @bar.com',
         "foo\t@bar.com",
         "foo\n@bar.com",
@@ -587,7 +587,7 @@ RSpec.describe EmailValidator do
         "domain-with-trailing-whitespace-tab@example.com\t",
         "domain-with-trailing-whitespace-newline@example.com
         "
-      ]).flatten.each do |email|
+      ).flatten.each do |email|
         context 'when using defaults' do
           it "'#{email}' should not be valid" do
             expect(DefaultUser.new(:email => email)).not_to be_valid
@@ -715,12 +715,12 @@ RSpec.describe EmailValidator do
         "#{v}start-with-#{k}@invalid-characters-in-local.dev"
       ]}).concat(strictly_invalid_endable.map { |k, v| [
         "end-with-#{k}#{v}@invalid-characters-in-local.dev"
-      ]}).concat([
+      ]}).push(
         'user..-with-double-dots@example.com',
         '.user-beginning-with-dot@example.com',
         'user-ending-with-dot.@example.com',
         'fully-numeric-tld@example.123'
-      ]).flatten.each do |email|
+      ).flatten.each do |email|
         context 'when using defaults' do
           it "#{email.strip} in a model should be valid" do
             expect(DefaultUser.new(:email => email)).to be_valid
